@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <link rel="stylesheet" type="text/css" href="dist/css/index.min.css" />
+        <title>VOYAGE</title>
+    </head>
+    <body>
+        <div class="_wrapper">
+
+          <!-- IMAGE HELP OVERLAY -->
+          <div class='imgHelpOverlay'></div>
+
+           <!-- THE LOADER VIEW -->
+           <div class='loaderOverlay'>
+             <div class='message'></div>
+           </div>
+
+           <!-- MAIN LOGO/SPLASH SCREEN-->
+           <div class='logo main'>
+              <div class='heading'>VOYAGE</div>
+              <div class='writeup'>
+                Not news, but articles which give you the big picture and the finer details.
+              </div>
+              <div class='writeup'>
+                Read one page at a time and remember to swipe up to turn the page.
+              </div>
+              <div class='writeup'>
+                Press the bookmark button to save the page and pick it up from where you left.
+              </div>
+
+              <img src='dist/img/loader.gif'/>
+              <div class='btn'>Okay, got it</div>
+           </div>
+
+           <!-- TOOLBAR -->
+           <div id='header'>
+                <div class='progress'></div>
+                <div class='back headerBtn'><</div>
+                <div class='pageLogo'></div>
+                <div class='title'></div>
+                <div class='menu headerBtn'></div>
+                <div class='save headerBtn'></div>
+                <div class='share headerBtn'></div>
+           </div>
+
+           <!-- SECTIONS -->
+           <div class='sections'>
+                <div class='link home'>Home</div>
+                <div class='link allthemes'>All themes</div>
+                <div class='link saved'>Saved Articles</div>
+                <div class='link profile'>Profile</div>
+           </div>
+
+
+           <!-- POSTS VIEW -->
+           <div class='posts'></div>
+
+           <!-- POST VIEW -->
+           <div class='postFull'></div>
+
+           <!-- THEMES VIEW -->
+           <div class='themes'></div>
+
+           <!--- USER LOGIN/REGISTRATION -->
+           <div class="userForm">
+              <div class="logoForm">VOYAGE</div>
+              <div class="loginMsg" style="margin-bottom: 30px;font-size: 80%;">Click login if you already have an email id setup.</div>
+              <input type="email" class='email' placeholder="Choose an email"/>
+              <input type="password" class='password' placeholder="Choose password"/>
+              <div class="btn btn1 register" >REGISTER</div>
+              <div>
+              <div class='btn2 login'>Login</div> <span class='divider'>&nbsp;|&nbsp;</span>
+              <div class='forgotPass'>Forgot Password</div>
+              </div>
+              <div class="btn sendTemp">Send Temp Password</div>
+              <div class="message" ></div>
+            </div>
+
+            <!--- USER PROFILE -->
+            <div class="userProfile">
+              <div class='email'></div>
+              <input type="password" class='password' placeholder="Enter new password"/>
+              <div class='changePass btn'>CHANGE PASSWORD</div>
+              <div class='logout btn'>LOGOUT</div>
+              <div class='message'></div>
+            </div>
+          </div>
+        <script src="cordova.js"></script>
+        <script src="dist/js/voyage-0.2.0.js"></script>
+    </body>
+</html>

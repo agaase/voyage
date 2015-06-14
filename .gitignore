@@ -1,0 +1,11 @@
+#random files
+.DS_Store
+config/config.json
+dist/css/*
+dist/js/*
+npm-debug.log
+readme.txt
+
+#node-modules
+node_modules/*
+node_modules

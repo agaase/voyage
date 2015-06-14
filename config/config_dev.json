@@ -1,0 +1,52 @@
+{
+	"APP_MESSAGES" : {
+        "REGISTER_SUCCESS_SUBJECT" : "Welcome to VOYAGE",
+        "REGISTER_SUCCESS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.voyageapp.in' style='display: block; text-decoration: none;background-color:#1CB9B8;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> VOYAGE </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Voyage</a></div>   <div style='margin-bottom:20px;'>Voyage believes in providing content which helps you know the big picture and the finer details.</div>  <ul>    <li style='margin-bottom:10px;'> Not news but articles which tell you facts mixed with the right amount of opinion and research that will get your grey cells racing.</li>       <li style='margin-bottom:10px;'> We help you read one page at a time, soak it all in and if not now, then you can always bookmark the page to come back and finish later.    </li>  </ul>  <div>    We would love your feedback. Please hit reply to this mail if you want to contribute in any way to our platform.    <br><br>    Cheers!<br>    <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Team Voyage</a>  </div></div></body>",
+        "FORGOT_PASS_SUBJECT" : "Your temporary password for VOYAGE",
+        "FORGOT_PASS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.voyageapp.in' style='display: block; text-decoration: none;background-color:#1CB9B8;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> VOYAGE </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Voyage</a> </div>  <div style='margin-bottom:20px;'>Here is your temporary password.</div>  {{TEMP_PASSWORD}}  <div style='margin:20px 0;'>Please change the password once you login to the app.</div>  <div>    If you still are facing any problems with signing in, please get back at support@voyageapp.in with your registerd email id and we will get back to you ASAP.    <br><br>    Cheers!<br>     <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Team Voyage</a>  </div></div></body>",
+        "OPEN_IN_BROWSER_MSG" : "Click on image to open in browser",
+        "VALID_USERNAME_PASSWORD" : "<span class='error'>Please enter valid username & password.</span>",
+        "INVALID_PASSWORD" : "<span class='error'>Password needs to be atleast 6 characters.</span>",
+        "LOGIN_MSG" : "Click login if you already have an email id setup",
+        "REGISTER_MSG" : "Click register if you are a new user",
+        "FORGOT_MSG" : "Enter the email you signed up with",
+        "INVALID_EMAIL" : "<span class='error'>Please enter valid email.</span>",
+        "ID_ALREADY_REGISTERED" : "<span class='error'>Id already registered</span>",
+        "INFO_SEND_TEMP_PASSWORD" : "We will send you a temporary password to your email id",
+        "INFO_SENT_TEMP_PASSWORD" : "Temporary password sent to your email. Please change once logged in. If you didn't receive it, please send a mail to support@voyageapp.in with your registered email id and we will check it out. <div class='backtologin'>Back to login</div>"
+    },
+
+    "END_POINTS" : {
+        "USERS_COLLECTION" : "https://api.mongolab.com/api/1/databases/voyageusers_dev/collections/users/",
+        "FEED_ITEMS" : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/_search",
+        "AUTH_HEADER" : "NGFsdW1lYnBxNzpiZ2I1ejg4aDFy"
+    },
+
+    "KEYS" : {
+        "MONGODB" : "Xh9SI49zvHqiW6Ma5KaQQsHcIuhu0l2G"
+    },
+
+	"THEMES" :  [
+		{
+			"category_title": "Critical Thinking"
+		},
+		{
+			"category_title": "India Opines"
+		},
+		{
+			"category_title": "Building a Business"
+		},
+		{
+			"category_title": "Value Investing"
+		},
+		{
+			"category_title": "Help Yourself"
+		},
+		{
+			"category_title": "World Watch"
+		},
+        {
+            "category_title" : "Technology Roundup"
+        }
+	]
+}
