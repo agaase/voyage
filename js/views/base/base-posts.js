@@ -85,8 +85,12 @@ var BasePostsView = (function(){
                 });
             }
             $(".post:not(.empty) .title",cont).unbind("click").on("click",function(ev){
-                $(".posts").fadeOut();
                 var postData;
+                var el = $(ev.currentTarget);
+                el.css("opacity",0.4);
+                setTimeout(function(){
+                    el.css("opacity",1);
+                },1000);
                 postData = this.data[$(ev.currentTarget).parent().attr("data-pos")];
                 var postView = new PostView(postData);
                 postView.launch();  

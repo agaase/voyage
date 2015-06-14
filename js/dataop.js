@@ -4,28 +4,6 @@ var DataOp = (function(){
         collection : {},
 
         /**
-         * Update on the posts page the progress of the article if its bookmarked.
-         * The progress is stored in local object in the same format it is to be represented. e.g 2/6
-         * @method updatePosts
-         */
-        updatePosts : function(){
-            if(app.state['postId']){
-                var post = $(".posts .post[data-id="+app.state['postId']+"]");
-                if(app.state["progress"]){
-                    post.addClass("inProgress");
-                    if($(".progress",post).length){
-                        $(".posts .post[data-id="+app.state['postId']+"] .progress").html(app.state["progress"]);
-                    }else{
-                        $(".metainfoWrapper",post).append("<div class='metainfo progress'>"+app.state["progress"]+"</div>");
-                    }
-                }else{
-                    post.removeClass("inProgress");
-                    $(".progress",post).hide();
-                }
-            }
-        },
-
-        /**
          * Sync up the saved articles to the server,
          * @method updateSavedPosts
          * @param  {function}         c - Callback function to call.
