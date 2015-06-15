@@ -240,6 +240,7 @@ var UIRender = (function(){
                         if(view.type.match(/(home|saved|posts)/gi)){
                           if(app.state && app.state["scrollPos"]){
                             $(".main").scrollTop(app.state["scrollPos"]);
+                            app.state["scrollPos"] = null;
                           }else{
                             $(".main").scrollTop(0);
                           }

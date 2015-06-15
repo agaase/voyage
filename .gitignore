@@ -5,6 +5,7 @@ dist/css/*
 dist/js/*
 npm-debug.log
 readme.txt
+img/*
 
 #node-modules
 node_modules/*
