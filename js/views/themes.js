@@ -65,7 +65,7 @@ var ThemesView = (function(){
                         updateUserThemes(themes,function(){
                             app.user.themes = themes;
                             window.localStorage.setItem("user",JSON.stringify(app.user));
-                            app.allPosts = null;    
+                            DataOp.setModel("home",[]);  
                             UIRender.drawHome();
                         }.bind(this));
                     }

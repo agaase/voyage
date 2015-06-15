@@ -6,16 +6,6 @@ var app = {
     user : undefined,
 
     /**
-     * Global cache object containing all the articles loaded for home.
-     */
-    allPosts : undefined,
-
-    /**
-     * Global cache object containing all the articles for each theme.
-     */
-    postsData  : {},
-
-    /**
      * Global object containing all the saved articles.
      */
     savedArticles : undefined,

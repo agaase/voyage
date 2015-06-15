@@ -39,7 +39,6 @@ var ThemeView = (function(){
             this.theme = theme;
             this.headerTitle = theme;
             this.firstRender = true;
-            app.postsData[this.theme] = [];
             this.count = 0;
         },
 

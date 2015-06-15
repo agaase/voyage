@@ -11,7 +11,7 @@ var ProfileView = (function(){
             window.localStorage.removeItem("user");
             window.localStorage.removeItem("articles");
             app.user = null;
-            app.allPosts = null;
+            DataOp.collection = {};
             app.savedArticles = {};
             c(r);
         }else{
