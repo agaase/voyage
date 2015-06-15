@@ -28,25 +28,32 @@
 
 	"THEMES" :  [
 		{
-			"category_title": "Critical Thinking"
+			"category_title": "Critical Thinking",
+            "description" : "Content which pushes your thought process and provides a new perspective of looking at things."
 		},
 		{
-			"category_title": "India Opines"
+			"category_title": "India Opines",
+            "description" : "Opinion on many issues impacting India by some of the finest minds around."
 		},
 		{
-			"category_title": "Building a Business"
+			"category_title": "Building a Business",
+            "description" : "Learn about product strategies, practical tips and personal experiences from the best in business."
 		},
 		{
-			"category_title": "Value Investing"
+			"category_title": "Value Investing",
+            "description" : "Everything related to value investing; business analysis, investment strategies, human behavior and lot of other things."
 		},
 		{
-			"category_title": "Help Yourself"
+			"category_title": "Help Yourself",
+            "description" : "Sometimes; its better to learn from the wisdom,experience and philosophies of others."
 		},
 		{
-			"category_title": "World Watch"
+			"category_title": "World Watch",
+            "description" : "What and WHY are the major events happening in the world?"
 		},
         {
-            "category_title" : "Technology Roundup"
+            "category_title" : "Technology Roundup",
+            "description" : "The latest happenings in the technology world; explained."
         }
 	]
 }
