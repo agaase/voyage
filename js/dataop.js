@@ -82,7 +82,7 @@ var DataOp = (function(){
         sendMail : function(params){
             $.ajax( { 
                 url: "https://api.sendgrid.com/api/mail.send.json",
-                data: "api_user=agaase&api_key=Bcda1234&to="+(params.to)+"&toname="+(params.toname||"")+"&subject="+(params.subject || "")+"&html="+(encodeURIComponent(params.body) || "")+"&from="+(params.from || "support@voyageapp.in")+"&fromname="+(params.fromname || ""),
+                data: "api_user=&api_key=&to="+(params.to)+"&toname="+(params.toname||"")+"&subject="+(params.subject || "")+"&html="+(encodeURIComponent(params.body) || "")+"&from="+(params.from || "support@voyageapp.in")+"&fromname="+(params.fromname || ""),
                 type: "POST"
             }).done(function(){
             });
