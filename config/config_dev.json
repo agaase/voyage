@@ -29,31 +29,39 @@
 	"THEMES" :  [
 		{
 			"category_title": "Critical Thinking",
-            "description" : "Content which pushes your thought process and provides a new perspective of looking at things."
+            "description" : "Content which pushes your thought process and provides a new perspective of looking at things.",
+            "color" : "#ECE8BA"
 		},
 		{
 			"category_title": "India Opines",
-            "description" : "Opinion on many issues impacting India by some of the finest minds around."
+            "description" : "Opinion on many issues impacting India by some of the finest minds around.",
+            "color" : "#D0E2B8"
+
 		},
 		{
 			"category_title": "Building a Business",
-            "description" : "Learn about product strategies, practical tips and personal experiences from the best in business."
+            "description" : "Learn about product strategies, practical tips and personal experiences from the best in business.",
+            "color" : "#E3C9C6"
 		},
 		{
 			"category_title": "Value Investing",
-            "description" : "Everything related to value investing; business analysis, investment strategies, human behavior and lot of other things."
+            "description" : "Everything related to value investing; business analysis, investment strategies, human behavior and lot of other things.",
+            "color": "#B3DCE8"
 		},
 		{
 			"category_title": "Help Yourself",
-            "description" : "Sometimes; its better to learn from the wisdom,experience and philosophies of others."
+            "description" : "Sometimes; its better to learn from the wisdom,experience and philosophies of others.",
+            "color" : "#E9D1EA"
 		},
 		{
 			"category_title": "World Watch",
-            "description" : "What and WHY are the major events happening in the world?"
+            "description" : "What and WHY are the major events happening in the world?",
+            "color" : "#D5B69A"
 		},
         {
             "category_title" : "Technology Roundup",
-            "description" : "The latest happenings in the technology world; explained."
+            "description" : "The latest happenings in the technology world; explained.",
+            "color" : "#C3CFE9"
         }
 	]
 }
