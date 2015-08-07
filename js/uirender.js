@@ -1,128 +1,72 @@
 
 var UIRender = (function(){
-    var currentView,viewStack=[];
 
-     /**
-     * The logic to toggle the sections menu.
-     * @method toggleSections
-     */
-    var toggleSections = function(){
-        var el = $("#header .menu");
-        el.toggleClass("open");
-        if(el.hasClass("open")){
-            $("._wrapper .sections").slideToggle();
-            //We hide the fixed position timestamp once menu shows up.
-            $(".timestamp.current").hide();
-            $(".timestamp:eq(1)").html($(".timestamp.current").html());
-            var tmtimer, orPos, touch;
-
-            $(".main").on("touchmove.lock",function(ev){
-                touch = ev.originalEvent.changedTouches[0];
-                if(!orPos){
-                    orPos = touch.pageY;
-                }
-                if(tmtimer){
-                    return;
-                }
-                tmtimer = setTimeout(function(){
-                    if(orPos-touch.pageY > 0){
-                        //If you are scrolling up; lets just close the sections.
-                        toggleSections();  
-                    }
-                    setTimeout(function(){
-                        tmtimer = 0;  
-                        orPos = 0;  
-                    },400);
-                },300);
-            });
-        }else{
-            $("._wrapper .sections").slideToggle(700);
-            $(".main").unbind("touchmove.lock");
-        }
-    };
-
-     /**
-         * Update on the posts page the progress of the article if its bookmarked.
-         * The progress is stored in local object in the same format it is to be represented. e.g 2/6
-         * @method updatePosts
-         */
-    var updatePosts = function(){
-        if(app.state['postId']){
-            var post = $(".posts .post[data-id="+app.state['postId']+"]");
-            if(app.state["progress"]){
-                post.addClass("inProgress");
-                if($(".progress",post).length){
-                    $(".posts .post[data-id="+app.state['postId']+"] .progress").html(app.state["progress"]);
-                }else{
-                    $(".metainfoWrapper",post).append("<div class='metainfo progress'>"+app.state["progress"]+"</div>");
-                }
-            }else{
-                post.removeClass("inProgress");
-                $(".progress",post).hide();
-            }
-        }
-    };
-
+    
     return {
+      viewStack : [],
+
+      /**
+       * Update on the posts page the progress of the article if its bookmarked.
+       * The progress is stored in local object in the same format it is to be represented. e.g 2/6
+       * @method updatePosts
+       */
+      updatePosts : function(){
+          if(app.state['postId']){
+              var post = $(".posts .post[data-id="+app.state['postId']+"]");
+              if(post.hasClass("saved")){
+                //For saved page we are redrawing the page.
+                return;
+              }
+              if(app.state["progress"]){
+                  if($(".progress",post).length){
+                      $(".progress",post).html(app.state["progress"]+"%");
+                  }else{
+                      $(".metainfoWrapper",post).append("<div class='metainfo progress'>"+app.state["progress"]+"%</div>");
+                  }
+              }else{
+                  post.removeClass("inProgress");
+                  $(".progress",post).hide();  
+              }
+          }
+      },
+
+      manageSectionsOpenTouch : function(e,isOpen){
+        var tmtimer, orPos, touch;
+        if(isOpen){
+          $(".main").on("touchmove.lock",function(ev){
+              touch = ev.originalEvent.changedTouches[0];
+              if(!orPos){
+                  orPos = touch.pageY;
+              }
+              if(tmtimer){
+                  return;
+              }
+              tmtimer = setTimeout(function(){
+                  if(orPos-touch.pageY > 0){
+                      //If you are scrolling up; lets just close the sections.
+                      $.publish("/vyg/togglesections",[false]);
+                  }
+                  setTimeout(function(){
+                      tmtimer = 0;  
+                      orPos = 0;  
+                  },400);
+              },300);
+          });
+        }else{
+          $(".main").unbind("touchmove.lock");
+        }
+      },
 
       /**
        * All the global events to be triggered.
        * @method assignEvents
        */
       assignEvents : function(){
-            $("#header .menu").gwClick(function(el){
-                toggleSections(el);
-            },{
-                "data-activegrp" : "dummy",
-                "useClick" : true
-            });
-            // The in app back button on the toolbar.
-            $("._wrapper .back").gwClick(function(el){
-                if(el.hasClass("refresh")){
-                    //If the main view has to be refreshed.
-                    $.when(this.manageViews("back")).then(function(type){
-                        updatePosts();
-                        DataOp.updateSavedPosts();
-                    });
-                }else{
-                    this.manageViews("back");
-                }
-            }.bind(this),{
-                "data-active" : "active",
-                "data-timeout" : 500,
-                "useClick" : true
-            });
-            //Binding the device back button.
-            document.addEventListener("backbutton", function(){
-                if($("#header").hasClass("post_context")){
-                    var el = $("._wrapper .back");
+            this.header.assignEvents();
 
-                    if(el.hasClass("refresh")){
-                        $.when(this.manageViews("back")).then(function(type){
-                            updatePosts();
-                        }.bind(this));
-                    }else{
-                        this.manageViews("back");
-                    }
-                }
-            }.bind(this), false);
-            // All the links on sections menu.
-            $(".sections .link").gwClick(function(el){
-                if(el.hasClass("allthemes")){
-                    var themeView = new ThemesView();
-                    themeView.launch();
-                }else if(el.hasClass("home")){
-                    UIRender.drawHome();
-                }else if(el.hasClass("saved")){
-                    $("._wrapper .posts").empty();
-                    var savedView = new SavedPostsView();
-                    savedView.launch();
-                    //postsView.drawPosts($.map(app.savedArticles, function(el) { return el; }),"Saved Articles","saved");    
-                }else if(el.hasClass("profile")){
-                    var profView = new ProfileView();
-                    profView.launch();
-                }
-            });
+            this.sections.assignEvents();
+            
+            $.subscribe("/vyg/sectionstoggled", this.manageSectionsOpenTouch);
 
             //The loader overlay which shows the loading sign and blocks the screen 
             //from user interactions in case of sync operation.
@@ -134,8 +78,12 @@ var UIRender = (function(){
             $(".imgHelpOverlay").on("touchstart touchmove",function(ev){
                 $(ev.currentTarget).removeClass("show").css("background-image","");
             }); 
+        },
 
-            
+        initialise : function(){
+            this.sections = new SectionsView();
+            this.header = new HeaderView();
+            this.assignEvents();
         },
 
          /**
@@ -177,84 +125,80 @@ var UIRender = (function(){
                       }
                   }.bind(this),1000);
               }
-              this.assignEvents();
+              
             }
         },
 
-        /**
-         * This is a very important function. This is where views are hidden and shown and toolbar is changed accordingly.
-         * @method manageViews
-         * @param  {string}    view  -  The view to show. view.type can be : userForm, home, saved, post, themes,profile
-         */
-        manageViews : function(view){
+
+        manageViews : function(view,fromStack){
+            if(fromStack){
+              var currentView = app.viewStack.pop();
+              var view =  app.viewStack[app.viewStack.length-1];
+            }else{
+              var currentView = app.viewStack.length ? app.viewStack[app.viewStack.length-1] : undefined;
+            }
             var def = $.Deferred();
             var cont = $("._wrapper");
-            if(view == "back"){
-                view = viewStack.pop();
-            }
-            var toShow;
-
             if(view.type){
-                if($(".sections").is(":visible")){
-                    //We close the section always.
-                    toggleSections();
-                }
-                $("#header .menu").removeClass("open");
-                $("#header",cont).removeClass().addClass(view.type + "_context");
-                if(!app.user || !app.user.themes || !app.user.themes.length) {
-                    //If no themes are selected; dont show the menu.
-                    $("#header",cont).addClass("noThemes");
-                }else{
-                    $("#header",cont).removeClass("noThemes");
-                }
+                var isSectionsOpen = this.sections.closeSections();
             }
-            if(view.name){
-                //If the name is passed we use it to show the title in toolbar.
-                $("#header .title").html(view.name);
-            }else{
-                $("#header .title").html("");
-            }
-            if(view.type == "userForm"){
-                toShow = $(".userForm",cont);  
-            }
-            else if(view.type.match(/(home|saved|posts)/gi)){
-                toShow = $(".posts",cont);
-                toShow.height(window.innerHeight-44);
-            }
-            else if(view.type == "post"){
-                toShow = $(".postFull",cont);
-                $("#header .back").removeClass("refresh");
-                app.state = app.state = {};
-                //The scroll position on articles is stored so that when we come back to article; we go to same article.
-                app.state["scrollPos"] = $(".main").scrollTop();
-            }else if(view.type == "themes"){
-                toShow = $(".themes",cont);
-            }else if(view.type == "profile"){
-                toShow = $(".userProfile",cont);
-            }
-            if(!currentView || view.type != currentView.type){
-                this.toggleLoader(true);
-                $(".main",cont).removeClass("main").fadeOut(200,function(){
-                    toShow.addClass("main").fadeIn(200,function(){
-                        def.resolve(view.type);
-                        if(view.type.match(/(home|saved|posts)/gi)){
-                          if(app.state && app.state["scrollPos"]){
-                            $(".main").scrollTop(app.state["scrollPos"]);
-                            app.state["scrollPos"] = null;
-                          }else{
-                            $(".main").scrollTop(0);
-                          }
-                        }
-                    });
-                });  
-                if(currentView){
-                    viewStack.push(currentView);
-                }
-            }else{
-                this.toggleLoader(true);
-                def.resolve(view.type);
-            }
-            currentView = view;
+            setTimeout(function(){
+              this.header.updateToolbarContext(view.type,view.headerTitle);
+              
+              var toShow = $(view.el,cont);
+
+              /** All this should be in specific views */
+              if(view.type.match(/(home|saved|posts)/gi)){
+                  toShow.height(window.innerHeight-44);
+              }
+              else if(view.type == "post"){
+                  $("#header .back").removeClass("refresh");
+                  app.state = app.state = {};
+                  //The scroll position on articles is stored so that when we come back to article; we go to same article.
+                  app.state["scrollPos"] = $(".main").scrollTop();
+              }
+
+
+              if( !currentView || view.type != currentView.type){
+                      if( !currentView || view.el != currentView.el ){
+                        //Only if current vip
+                        //ew is not same as old view
+                        this.toggleLoader(true);
+                        $(".main",cont).removeClass("main").fadeOut(200,function(){
+                            toShow.addClass("main").fadeIn(200,function(){
+                                def.resolve(view.type);
+                                if(view.type.match(/(home|saved|posts)/gi)){
+                                  if(app.state && app.state["scrollPos"]){
+                                    $(".main").scrollTop(app.state["scrollPos"]);
+                                    app.state["scrollPos"] = null;
+                                  }else{
+                                    $(".main").scrollTop(0);
+                                  }
+                                }
+                                if(view.type == "saved"){
+                                  //
+                                  view.loadFromCache();
+                                }
+                            });
+                        });  
+                      }else if(view.loadFromCache){
+                        view.loadFromCache();
+                        $(".main").scrollTop(0);  
+                      }
+                  if(!fromStack){
+                      //If not from stack; lets add this to stack
+                      if(app.viewStack.length > 2){
+                        //At max we keep 3 views in stack
+                        app.viewStack.splice(0,1);  
+                      }
+                      app.viewStack.push(view);
+                  }
+              }else{
+                  this.toggleLoader(true);
+                  def.resolve(view.type);
+              }
+              currentView = view;
+            }.bind(this),isSectionsOpen ? 500 :  50);
             return def.promise(view.type);
         },
 
@@ -276,6 +220,9 @@ var UIRender = (function(){
          */
         toggleLoader : function(param){
             $(".loaderOverlay .message").html("");
+            $(".loaderOverlay").unbind("touchstart").bind("touchstart",function(e){
+                e.preventDefault();
+            });
             if(typeof(param) == "boolean"){
                 if(param){
                     $(".loaderOverlay").hide();
@@ -290,7 +237,22 @@ var UIRender = (function(){
             }else{
                 $(".loaderOverlay").toggle();
             }
+        },
 
+        /**
+         * To show an info message to the user
+         * @method toggleInfoMessage
+         * @param  {[type]}          msg      [description]
+         * @param  {[type]}          duration [description]
+         * @return {[type]}
+         */
+        showInfoMessage : function(msg,isError,duration){
+            if(msg){
+                $("#infoMessage").removeClass().addClass(isError ? "error" : "").html(msg).fadeIn();
+                setTimeout(function(){
+                    $("#infoMessage").fadeOut();
+                },(duration || 3500));
+            }
         }
 
     };

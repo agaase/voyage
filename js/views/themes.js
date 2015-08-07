@@ -13,10 +13,11 @@ var ThemesView = (function(){
     var obj = BaseView.extend({
 
         type : "themes",
+        el : ".themes",
 
         constructor : function(){
             this.data = app.user.themes;
-            this.allThemes = $.extend(true,[],app.config["THEMES"]);
+            this.allThemes = $.extend(true,{},app.config["THEMES"]);
         },
 
         fetchData : function(c){    
@@ -24,41 +25,74 @@ var ThemesView = (function(){
         },
 
         render : function(){
-            $.each(this.allThemes,function(i,v){
-                if(this.data.indexOf(v.category_title)>-1){
+            $.each(this.allThemes,function(k,v){
+                if(this.data.indexOf(k)>-1){
                     v.isChoosen = true;
                 }
             }.bind(this));
-            var html = " <div class='done'> Select atleast three themes you find interesting</div>";
-            html += "<div class='themesC' style='height:"+(window.innerHeight-124)+"px;'>";
-            $.each(this.allThemes,function(i,theme){
-                html += "<div class='theme' data-id='"+theme.cid+"'><div class='title "+(theme.isChoosen ? "selected" : "")+"'><span>"+theme.category_title+"</span></div> <div class='descr'>"+(theme.category_desc || "")+"</div></div>";
+            var html = "<div class='done'>"+app.config["APP_MESSAGES"]["THEMES_PAGE_MSG"]+"</div>";
+            html += "<div class='themesC' style=display: inline-block;'height:"+(window.innerHeight-124)+"px;'>";
+            
+            $.each(this.allThemes,function(k,theme){
+                html += "<div class='theme' data-id='"+k+"'><div class='catImg' style='background-image:url(\""+theme.img+"\");'></div><div class='title "+(theme.isChoosen ? "select" : "")+"'>"+theme.category_title+"</div><div class='checkboxW "+(theme.isChoosen ? "selected" : "")+"'><div class='checkbox'></div></div> </div>";
             });
-            html += "</div>";
+            html += "<div class='de'></div>";
+            var p=app.config.THEMES;
+            //html += "</div> <div class='de "+(p.isChoosen ? "select" : "")+"'></div>";
             $("._wrapper .themes").html(html);
         },
 
         viewLoaded : function(){
-            var orginalThemes = $(".theme .title.selected").map(function(){return $(this).text();}).toArray();
-            $("._wrapper .theme .title").gwClick(function(el){
+            var orginalThemes = $(".theme .title.select").map(function(){return $(this).text();}).toArray();
+            $("._wrapper .theme .checkboxW").gwClick(function(el){
                 el.toggleClass("selected");
-                var themes = $(".theme .title.selected").map(function(){return $(this).text();}).toArray();
-                if(themes.length>=3 && orginalThemes.sort().join() != themes.sort().join()){
+                el.parent().find(".title").toggleClass("select");
+                var themes = $(".theme .title.select").map(function(){return $(this).text();}).toArray();
+                if(themes.length>=2 && orginalThemes.sort().join() != themes.sort().join()){
                     //Only show the button once three themes are selected.
-                    $('._wrapper .done').addClass("btn").html("PREPARE HOME");
+                    $('._wrapper .done').addClass("btn").html("SAVE");
                 }else{
-                    $('._wrapper .done').removeClass("btn").html(" Select atleast three themes you find interesting");
+                    $('._wrapper .done').removeClass("btn").html(app.config["APP_MESSAGES"]["THEMES_PAGE_MSG"]);
                 }
             }.bind(this),{
                 "data-timeout" : 100
             });
+            var t;
+
+            $("._wrapper .theme .title,._wrapper .theme .catImg").gwClick(function(el){
+                var par = el.parent();
+                var cid = par.data("id");
+                var descCont = $(".de",par.parent());
+                var html="<div class='describe'><div class='head'>"+this.allThemes[cid].category_title+"<span class='img' style='background-image:url(\""+this.allThemes[cid].img+"\");'></span></div><div class='para'>"+this.allThemes[cid].description+"</div><div class='button'></div></div>";
+                descCont.html(html);
+                descCont.addClass("show");
+                //descCont.addClass("('.de').scale(1).end();
+
+                descCont.gwClick(function(el,ev){
+                   var ct = $(ev.target);
+                   if(ct.hasClass("button")){
+                        UIRender.toggleLoader("Loading theme..");
+                        var thView = new ThemeView(cid);
+                        thView.launch();  
+                   }
+                   else if(!ct.parents(".describe").length){
+                        descCont.removeClass("show");
+                        //move('.de').scale(0).end();
+                   }
+                }.bind(this),{
+                    "data-timeout" : 100
+                });
+            }.bind(this),{
+                "data-timeout" : 100
+            });
+ 
             $("._wrapper .done").gwClick(function(el){
                 if(!el.hasClass("btn")){
                     return;
                 }
                 var themes;
-                if($(".theme .title.selected").length){
-                    themes = $(".theme .title.selected").map(function(){return $(this).text();}).toArray();
+                if($(".theme .checkboxW.selected").length){
+                    themes = $(".theme .checkboxW.selected").map(function(){return $(this).parent().data("id");}).toArray();
                     if(orginalThemes.sort().join() != themes.sort().join()){
                         //Only update if we have different set of themes.
                         UIRender.toggleLoader(); 

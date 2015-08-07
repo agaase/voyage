@@ -4,92 +4,53 @@ var HomeView = (function(){
 
         type : "home",
 
-        getPostItemLayout : function(post){
+        getPostItemLayout :function(post,timeAdded){
             var html="";
             var isInProgress = app.savedArticles && Object.keys(app.savedArticles).indexOf(post._id)>-1;
-            html += "<div class='post "+ (isInProgress ? " inProgress" : "")+"' data-pos='"+this.count+"' data-id='"+post._id+"'>";
+            html += "<div class='post "+ (isInProgress ? " inProgress" : "")+ (timeAdded ? " noBorder" : "")+"' data-pos='"+this.count+"' data-id='"+post._id+"'>";
             html += "<div class='title'>"+post.title+"</div>";
-            var src = post.feedSource;
-            html += "<div class='metainfoWrapper'>";
-            //Trying to fetch source link from guid.
-            src = /(http(s)*:\/\/)*(www\.)*(.*?)\//.exec(src);
-            src = (src && src.length > 1 ? src[src.length-1] : "");
-            if(src.indexOf("proxy")==-1){
-                html += "<div class='metainfo source'>"+src+"</div>";
-            }
-
-            html += "<div class='metainfo themeName'>"+post.categories+"&nbsp;</div>";
-            if(isInProgress){
-                var savedPost = app.savedArticles[post._id];
-                html += "<div class='metainfo progress'>"+savedPost.readingPos+"/"+savedPost.totalPages+"</div> ";
-            }   
-            html += "</div>";
-            if(post.image && post.image.url){
+            
+        if(post.image && post.image.url){
                 //console.log(JSON.stringify(post.image));
                 html += "<div class='image' style='background-image:url(\""+post.image.url+"\")'></div>";
             }
-            html += "<div class='summary'   >"+ ( post.description.replace(/<\/?[^>]+(>|$)/g,"").substring(0,150).match(/[^]*\s/).toString())+"..</div>";
+            post.summary = post.summary ? post.summary.replace(/<\/?[^>]+(>|$)/g,"").substring(0,250) : "";
+            html += "<div class='summary'   >"+ ( post.summary || post.description.replace(/<\/?[^>]+(>|$)/g,"").substring(0,250).match(/[^]*\s/).toString())+"</div>";
+            html += "<div class='metainfoWrapper'>";
+            
+            var cat = app.config.THEMES[post.categories.split(",")[0]];
+            html += "<div class='metainfo themeName' data-id='"+post.categories+"'><span class='catImage' style='background-image:url(\""+cat.img+"\")'></span><span>"+cat.category_title+"</span></div>";
+            html += "<div class='metainfo source'>"+post.feedTitle+"</div>";
+            if(isInProgress){
+                var savedPost = app.savedArticles[post._id];
+                html += "<div class='metainfo progress'>"+savedPost.progress+"%</div> ";
+            }   
+            html += "</div>";
             html += "</div>";
             return html;
         },
 
         constructor : function(themes){
             this.themes = themes;
+            this.modelKey = "home";
             this.count = 0;
             this.firstRender = true;
         },
 
-        fetchData : function(c){
-            if(this.firstRender){
-                this.data = DataOp.getModel(this.type);
-                if(this.data.length>0){
-                    c();
-                    return;
-                }
-            }
-
+        getBoolQ : function(){
             var themes = this.themes.map(function(v){
-                return {"term" : {"categories":v}};
+                return {"term" : {"categories":v.toLowerCase()}};
             });
-            var q = {
-                  "size" : 20,
-                  "from" : this.count,
-                  "query": {
-                    "filtered": {
-                      "filter": {
-                        "bool": {
-                          "must" : [
-                            {
-                            "exists": {
-                              "field": "publish_on"
-                            }
-                          }],
-                          "should" : themes
-                        }
-                      }
-                    }
-                  },
-                  "sort": [
-                    {
-                      "publish_on": {
-                        "order": "desc"
-                      }
-                    }
-                  ]
-                };
-            DataOp.loadURL({
-                u : app.config["END_POINTS"]["FEED_ITEMS"],
-                t : "POST",
-                d :  JSON.stringify(q),
-                c : function(resp){
-                        resp = resp.hits.hits.map(function(v){v._source._id = v._id; return v._source;});
-                        this.data = $.merge(this.data || [], resp);
-                        DataOp.setModel(this.type,this.data);
-                        c();
-                    }.bind(this)
-            });
+            return {
+                "must" : [
+                  {
+                  "exists": {
+                    "field": "publish_on"
+                  }
+                }],
+                "should" : themes
+            };
         }
-
     });
     return obj;
 })();

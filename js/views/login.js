@@ -17,14 +17,15 @@ var LoginView = (function(){
                     DataOp.addUser({
                         "_id" : email,
                         "email" : email,
-                        "password" : pass
+                        "password" : pass,
+                        "themes" : Object.keys(app.config.THEMES)
                     },function(u){
                         DataOp.sendMail({
                             "to" : email,
                             "subject" : app.config.APP_MESSAGES["REGISTER_SUCCESS_SUBJECT"],
                             "body" : app.config.APP_MESSAGES["REGISTER_SUCCESS_BODY"],
-                            "from" : "team@voyageapp.in",
-                            "fromname" : "Team Voyage"
+                            "from" : "team@opsight.in",
+                            "fromname" : "Team Opsight"
                         });
                         UIRender.toggleLoader("Successfully registered; Redirecting..");
                         setTimeout(function(){
@@ -170,12 +171,12 @@ var LoginView = (function(){
               if(val && val.length){
                   UIRender.toggleLoader();
                   //Any random password would do.
-                  var pass = "VYG_"+parseInt(Math.random()*1000);
+                  var pass = "vyg"+parseInt(Math.random()*1000);
                   DataOp.sendMail({
                       "to" : val,
                       "subject" : app.config.APP_MESSAGES["FORGOT_PASS_SUBJECT"],
                       "body" : app.config.APP_MESSAGES["FORGOT_PASS_BODY"].replace("{{TEMP_PASSWORD}}",pass),
-                      "fromname" : "Support Voyage"
+                      "fromname" : "Support Opsight"
                   });
                   savePassword(md5(pass),function(){
                       UIRender.toggleLoader();
@@ -196,6 +197,8 @@ var LoginView = (function(){
     var obj = BaseView.extend({
 
       type : "userForm",
+      
+      el : ".userForm",
 
       viewLoaded : function(){
           bindLoginRegisterEvent();
@@ -205,6 +208,5 @@ var LoginView = (function(){
       }
 
     });
-    
     return obj;
 })();

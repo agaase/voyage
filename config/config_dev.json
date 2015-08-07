@@ -1,9 +1,9 @@
 {
-	"APP_MESSAGES" : {
-        "REGISTER_SUCCESS_SUBJECT" : "Welcome to VOYAGE",
-        "REGISTER_SUCCESS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.voyageapp.in' style='display: block; text-decoration: none;background-color:#1CB9B8;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> VOYAGE </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Voyage</a></div>   <div style='margin-bottom:20px;'>Voyage believes in providing content which helps you know the big picture and the finer details.</div>  <ul>    <li style='margin-bottom:10px;'> Not news but articles which tell you facts mixed with the right amount of opinion and research that will get your grey cells racing.</li>       <li style='margin-bottom:10px;'> We help you read one page at a time, soak it all in and if not now, then you can always bookmark the page to come back and finish later.    </li>  </ul>  <div>    We would love your feedback. Please hit reply to this mail if you want to contribute in any way to our platform.    <br><br>    Cheers!<br>    <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Team Voyage</a>  </div></div></body>",
-        "FORGOT_PASS_SUBJECT" : "Your temporary password for VOYAGE",
-        "FORGOT_PASS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.voyageapp.in' style='display: block; text-decoration: none;background-color:#1CB9B8;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> VOYAGE </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Voyage</a> </div>  <div style='margin-bottom:20px;'>Here is your temporary password.</div>  {{TEMP_PASSWORD}}  <div style='margin:20px 0;'>Please change the password once you login to the app.</div>  <div>    If you still are facing any problems with signing in, please get back at support@voyageapp.in with your registerd email id and we will get back to you ASAP.    <br><br>    Cheers!<br>     <a href='http://www.voyageapp.in' style='color:#1CB9B8;text-decoration: underline;'>Team Voyage</a>  </div></div></body>",
+    "APP_MESSAGES" : {
+        "REGISTER_SUCCESS_SUBJECT" : "Welcome to Opsight",
+        "REGISTER_SUCCESS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.opsight.in' style='display: block; text-decoration: none;background-color:#3eb3da;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> Opsight </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.opsight.in' style='color:#3eb3da;text-decoration: underline;'>Opsight</a></div>   <div style='margin-bottom:20px;'>At Opsight we curate articles online, carefully selected to speak to your intelligence and broaden your horizons.</div>  <ul>    <li style='margin-bottom:10px;'> We go beyond harvesting just news. We aim to provide news and perspectives that discuss key issues of our time in nuanced, analytical and distinct ways.    </li>    <li style='margin-bottom:10px;'> Voyage encourages a personalised reader experience. Make this journey your own, read now, or save for later if you so wish.    </li>    <li style='margin-bottom:10px;'> Become part of a new community of well-informed, knowledgeable and alert users who strive to know more, dig deeper, and aim higher.    </li>  </ul>  <div>     We would love your feedback. Please hit reply to this mail if you would like to contribute in any way to this platform.    <br><br>    Cheers!<br>    <a href='http://www.opsight.in' style='color:#3eb3da;text-decoration: underline;'>Team Opsight</a>  </div></div></body>",
+        "FORGOT_PASS_SUBJECT" : "Your temporary password for Opsight",
+        "FORGOT_PASS_BODY" : "<body style='margin:0;font-family:sans-serif;'>  <a href='http://www.opsight.in' style='display: block; text-decoration: none;background-color:#3eb3da;color:#fff;margin:0;padding:10px 0;text-align:center;margin-bottom:20px;font-size:150%;'> OPSIGHT </a><div style='padding:15px;'><div style='margin-bottom:20px;'> Welcome to <a href='http://www.opsight.in' style='color:##3eb3da;text-decoration: underline;'>Opsight</a> </div>  <div style='margin-bottom:20px;'>Here is your temporary password.</div>  {{TEMP_PASSWORD}}  <div style='margin:20px 0;'>Please change the password once you login to the app.</div>  <div>    If you still are facing any problems with signing in, please get back at team@opsight.in with your registerd email id and we will get back to you ASAP.    <br><br>    Cheers!<br>     <a href='http://www.opsight.in' style='color:##3eb3da;text-decoration: underline;'>Team Opsight</a>  </div></div></body>",
         "OPEN_IN_BROWSER_MSG" : "Click on image to open in browser",
         "VALID_USERNAME_PASSWORD" : "<span class='error'>Please enter valid username & password.</span>",
         "INVALID_PASSWORD" : "<span class='error'>Password needs to be atleast 6 characters.</span>",
@@ -11,57 +11,75 @@
         "REGISTER_MSG" : "Click register if you are a new user",
         "FORGOT_MSG" : "Enter the email you signed up with",
         "INVALID_EMAIL" : "<span class='error'>Please enter valid email.</span>",
-        "ID_ALREADY_REGISTERED" : "<span class='error'>Id already registered</span>",
+        "ID_ALREADY_REGISTERED" : "<span class='error'>Email already registered</span>",
         "INFO_SEND_TEMP_PASSWORD" : "We will send you a temporary password to your email id",
-        "INFO_SENT_TEMP_PASSWORD" : "Temporary password sent to your email. Please change once logged in. If you didn't receive it, please send a mail to support@voyageapp.in with your registered email id and we will check it out. <div class='backtologin'>Back to login</div>"
+        "INFO_SENT_TEMP_PASSWORD" : "Temporary password sent to your email. Please change once logged in. If you didn't receive it, please send a mail to support@voyageapp.in with your registered email id and we will check it out. <div class='backtologin'>Back to login</div>",
+        "THEMES_PAGE_MSG" : "Customize your home page by choosing themes (atleast two)"
     },
 
     "END_POINTS" : {
         "USERS_COLLECTION" : "https://api.mongolab.com/api/1/databases/voyageusers_dev/collections/users/",
-        "FEED_ITEMS" : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/_search",
-        "AUTH_HEADER" : "NGFsdW1lYnBxNzpiZ2I1ejg4aDFy"
+        "FEED_ITEMS" : "http://vyg2.herokuapp.com/data",
+        "AUTH_HEADER" : "NGFsdW1lYnBxNzpiZ2I1ejg4aDFy",
+        "SENDGRID" : "http://vyg2.herokuapp.com/mail"
+    },
+
+    "LOGIC_CONFIG" : {
+        "REFRESH_TRIGGER" : {
+            "hrs" : 1,
+            "mins" : 30
+        },
+        "REFRESH_POSTS_GET_COUNT" : 30,
+        "INC_POST_FETCH_COUNT" : 20
     },
 
     "KEYS" : {
         "MONGODB" : "Xh9SI49zvHqiW6Ma5KaQQsHcIuhu0l2G"
     },
 
-	"THEMES" :  [
-		{
-			"category_title": "Critical Thinking",
-            "description" : "Content which pushes your thought process and provides a new perspective of looking at things.",
-            "color" : "#ECE8BA"
-		},
-		{
-			"category_title": "India Opines",
-            "description" : "Opinion on many issues impacting India by some of the finest minds around.",
-            "color" : "#D0E2B8"
-
-		},
-		{
-			"category_title": "Building a Business",
-            "description" : "Learn about product strategies, practical tips and personal experiences from the best in business.",
-            "color" : "#E3C9C6"
-		},
-		{
-			"category_title": "Value Investing",
-            "description" : "Everything related to value investing; business analysis, investment strategies, human behavior and lot of other things.",
-            "color": "#B3DCE8"
-		},
-		{
-			"category_title": "Help Yourself",
-            "description" : "Sometimes; its better to learn from the wisdom,experience and philosophies of others.",
-            "color" : "#E9D1EA"
-		},
-		{
-			"category_title": "World Watch",
-            "description" : "What and WHY are the major events happening in the world?",
-            "color" : "#D5B69A"
-		},
-        {
-            "category_title" : "Technology Roundup",
-            "description" : "The latest happenings in the technology world; explained.",
-            "color" : "#C3CFE9"
+    "THEMES" :  {
+        "T1" : {
+            "category_title": "India",
+            "description" : "Opinions and analyses that focus on India and its myriad issues.",
+            "color" : "#D0E2B8",
+            "img" : "dist/img/india.png"
+        },
+        "T2" : {
+            "category_title": "wisdom",
+            "description" : "Experiences, philosophies and ways of the world. Sometimes it's best to learn from the wisdom of others.",
+            "color" : "#E3C9C6",
+            "img" : "dist/img/life.png"
+        },
+        "T3" : {
+            "category_title": "finance",
+            "description" : "Everything related to value investing, personal finance and human behavior.",
+            "color": "#B3DCE8",
+            "img" : "dist/img/finance.png"
+        },
+        "T4" : {
+            "category_title": "world",
+            "description" : "The world as it unfolds, reflecting concerns around politics, environment and humanity, among all else.",
+            "color" : "#D5B69A",
+            "img" : "dist/img/world.png"
+        },
+        "T5" : {
+            "category_title" : "tech",
+            "description" : "The latest trends, movements and concepts in the technology world.",
+            "color" : "#C3CFE9",
+            "img" : "dist/img/tech.png"
+        },
+        "T6" : {
+            "category_title" : "investing",
+            "description" : "The latest trends, movements and concepts in the technology world.",
+            "color" : "#C3CFE9",
+            "img" : "dist/img/tech.png"
+        },
+        "T7" : {
+            "category_title" : "self-learn",
+            "description" : "The latest trends, movements and concepts in the technology world.",
+            "color" : "#C3CFE9",
+            "img" : "dist/img/tech.png"
         }
-	]
+
+    }
 }

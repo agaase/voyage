@@ -14,7 +14,7 @@ var customClickTimeoutAttr =  "data-timeout";
  */
 $.fn.gwClick = function(callback,options){
     options = options || {};
-    var touchEndTimer=0,startPosX=0,startPosY=0, marginX = (options.marginX || 2), marginY = (options.marginY || 2) ;
+    var touchEndTimer=0,startPosX=0,startPosY=0, marginX = (options.marginX || 5), marginY = (options.marginY || 5) ;
     var eventTrigger = function(ev){
         var tapEl = $(ev.currentTarget);
         var activeGroup = options[customClickActiveGrpAttr] || tapEl.attr(customClickActiveGrpAttr), timeout;

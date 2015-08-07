@@ -28,7 +28,8 @@ var PostView = (function(){
         $("#header .back").addClass("refresh");
         app.state = app.state || {};
         app.state["postId"] = postData._id;
-        app.state["progress"] = postData.readingPos+"/"+postData.totalPages;
+        app.state["progress"] = postData.progress;
+        postData["lastRead"] = new Date().toISOString();
         app.savedArticles[postData._id] = postData;
         if(this.persistTimeout){
             clearTimeout(this.persistTimeout);
@@ -39,96 +40,34 @@ var PostView = (function(){
         },2000);
     };
 
-    /**
-     * The function which carries out the swipe between the pages of the article.
-     * Whats left is the ability to drag and pan the page instead of simple swipe.
-     * @method enableArticleSnap
-     * @param  {object}   el  - the jquery element object on which snap is to be enabled.
-     * @param  {[type]}   c   - The callback function which will be called on successfull snap to next/prev page.
-     */
-    var enableArticleSnap = function(el,c){
-        el.css("overflow","hidden");
-        var y  = 0, startPosY, moveTimer, originalstartPosY,originalstartPosX;
-        var h = $(".postFull").height();
-        var pos = parseInt($("#header .progress .pos").text());
-        var tot = parseInt($("#header .progress .total").text());
+    var enableArticleSnap = function(elSel,pos,c){
+        myScroll = new IScroll(elSel, { probeType: 3, mouseWheel: true, click : true});
+        var timer;
+        myScroll.on('scroll', function(){
+            c(this.y);
+        });
+        myScroll.scrollTo(0,pos*-1);
 
-        var handleTouchstart = function(ev){
-            var touchobj = ev.originalEvent.changedTouches[0];
-            originalstartPosY = touchobj.pageY;
-            originalstartPosX = touchobj.pageX;
-            startPosY = originalstartPosY; 
-        };
-        var moving = false;
-        var handleTouchmove = function(ev){
-            ev.preventDefault();
-            //This is where iam trying to implement drag. But needs improvement. Till then lets just go back.
-            return;
-            if(moving){
-                return;
-            }
-            moving=true;
-            var touchobj = ev.originalEvent.changedTouches[0];
-            var diff = Math.ceil((touchobj.pageY-startPosY));
-            y = y + diff;
-
-            if(diff < 0){
-                y = y < (pos * h * -1) ? (pos * h * -1) : y;
-                y = y < ((tot-1) * h * -1) ? ((tot-1) * h * -1) : y;
-            }else if(diff >= 0){
-                y = y > ((pos-2) * h * -1) ? ((pos-2) * h * -1) : y;
-                y = y > 0 ? 0 : y;
-            }
-            //The time for snap is calculated as the touch distance difference x 3 milliseconds. 
-            $(".postFullCont").css({"webkit-transform":"translateY("+y+"px)","webkit-transition-duration":""+Math.abs(diff)*3+"ms"});    
-            setTimeout(function(){
-                //Going to disable any further transform if the page is moving.
-                moving=false;
-            },Math.abs(diff)*5);
-            startPosY = touchobj.pageY;
-        };
-        var handleTouchend = function(ev){
-            if(moveTimer){
-                clearTimeout(moveTimer);
-            }
-            ev.stopPropagation();
-            var touchobj = ev.originalEvent.changedTouches[0];
-            var endPosY = touchobj.pageY;
-            var endPosX = touchobj.pageX;
-            if(Math.abs(endPosY-originalstartPosY)>10 && Math.abs(endPosX-originalstartPosX)<100){
-                snapto( (endPosY-originalstartPosY)>0 ? "down" : "up" , ev);
-            }
-        };
-
-        el.on("touchstart",handleTouchstart).on("touchmove",handleTouchmove).on("touchend",handleTouchend);
-        var snapto = function(dir){
-            if(dir=="up" && pos < tot){
-                pos++;
-            }else if(dir=="down" && pos > 1){
-                pos--;
-            }
-            snapArticle(pos);
-            y = -1*$(".postFull").height()*(pos-1);
-            c(pos);
-        };
+        //myScroll.on('scrollEnd', updatePosition);
+        /*        
+        this.myScroll = new IScroll(elSel, {
+            snap : true,
+            momentum : false
+            });
+        this.myScroll.on('scrollEnd',function(ev){
+                c(this.currentPage.pageY+1);
+        });
+        if(pos>1){
+           this.myScroll.goToPage(0, pos-1, 1000);   
+        }
+        */
     };
-
-    
-
-    /**
-     * Just carries the snap to the specified page.
-     * @method snapArticle
-     * @param  {number}    pos  - The page number to which to snap to.
-     */
-    var snapArticle = function(pos){
-        $("#header .progress .pos").html(pos);    
-        $(".postFullCont").css({"webkit-transform":"translateY(-"+$(".postFull").height()*(pos-1)+"px)","webkit-transition-duration":"400ms"});
-    };
-
     
     var obj = BaseView.extend({
 
         type : "post",
+
+        el : ".postFull",
 
         constructor : function(post){
             this.post = post;
@@ -141,8 +80,7 @@ var PostView = (function(){
                     unsaveArticle(this.post);
                     el.removeClass("saved");
                 }else{
-                    this.post.readingPos = parseInt($('#header .progress .pos').text());
-                    this.post.totalPages = parseInt($('#header .progress .total').text());
+                    this.post.progress = Math.floor( (parseInt($('#header .progress .pos').text())/parseInt($('#header .progress .total').text())) * 100);
                     saveArticle(this.post);
                     el.addClass("saved");
                 }
@@ -195,37 +133,50 @@ var PostView = (function(){
             var totImg = $(".postFullCont img"), imgLoadCt = 0;
             if(totImg.length){
                 //Wrapping each image with a container which has a message.
-                $(".postFullCont img").wrap("<div/>").parent().append("<p class='imgMsg'>"+app.config.APP_MESSAGES.OPEN_IN_BROWSER_MSG+"</p>").addClass("imageCont");
+                $(".postFullCont img").wrap("<div/>").parent().addClass("imageCont");
             }
             
             //Calculating the height of one page. It will be the height which is a perfect multiple of 25 and less the window height minus toolbar.
-            var toLeave = (window.innerHeight-50)%25+50;
-            $(".postFull").height(window.innerHeight - toLeave).css("margin-top","50px");
+            var toLeave = (window.innerHeight-55)%25+50;
+            $(".postFullContWrapper").height(window.innerHeight - toLeave);
 
+
+            var pageHt = window.innerHeight-toLeave;
+            var totHt = $(".postFullCont").height();
             //The number of pages will be the total height rendered divided by calculated height of one page.
-            var pages = Math.ceil($(".postFullCont").height()/(window.innerHeight-toLeave));
-            
+            var pages = Math.ceil(totHt/(pageHt));
+
+
             //Setting the progress element.
             $("#header .progress").html("<span class='pos'>1</span>/<span class='total'>"+pages+"</span>").show();
 
             //Check if the post is bookmarked
+            var pagePos=1;
             if(app.savedArticles){
                 if(Object.keys(app.savedArticles).indexOf(this.post._id)>-1){
                     $("#header .save").addClass("saved");
-                    var pos = app.savedArticles[this.post._id]["readingPos"];
-                    snapArticle(pos);
+                    pagePos = Math.ceil((app.savedArticles[this.post._id]["progress"]/100) * pages);
                 }else{
                     $("#header .save").removeClass("saved");
                 }
             }
-            
+            var elPos = $("#header .progress .pos");
+            elPos.data("pos",pagePos).html(pagePos);
             //The last step is to enable the snapping across pages.
-            enableArticleSnap($('.postFull'),function(pos){
-                //The callback function called on swipe which will keep updating the progress if its a saved article
-                if($("#header .save").hasClass('saved')){
-                    this.post.readingPos = pos;
-                    this.post.totalPages = pages;
-                    saveArticle(this.post,true);
+            enableArticleSnap.call(this,'.postFullContWrapper',Math.min((pagePos -1)*pageHt,totHt-pageHt),function(position){
+                if(Math.abs(position)+pageHt >= (totHt-10)){
+                    pos = pages;
+                }else{
+                    var pos = (Math.abs(position) + pageHt)/pageHt;
+                    pos = Math.floor(pos);
+                }
+                if(parseInt(elPos.data("pos")) !== pos ){
+                    elPos.data("pos",pos).html(pos);
+                    //The callback function called on swipe which will keep updating the progress if its a saved article
+                    if($("#header .save").hasClass('saved')){
+                        this.post.progress = Math.floor( (pos/pages) * 100);
+                        saveArticle(this.post,true);
+                    }
                 }
             }.bind(this));
         },
@@ -234,8 +185,30 @@ var PostView = (function(){
             this.enablePageLayout();
             this.assignHeaderEvents();
             this.assignArticleEvents();
+            this.recordView();
         },
 
+        recordView : function(){
+            DataOp.loadURL({
+                u : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/"+this.post._id,
+                t : "GET",
+                c : function(d){
+                    if(!d._source){
+                        return;
+                    }
+                    var toUpd = {
+                        "doc" : { "view_count" : d._source.view_count ? d._source.view_count+1 : 1}
+                    };
+                    DataOp.loadURL({
+                        u : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/"+d._id+"/_update",
+                        t : "POST",
+                        d : JSON.stringify(toUpd),
+                        c : function(){
+                        }.bind(this)
+                    });
+                }.bind(this)
+            },true);
+        },
 
         render : function(){
             var post = this.post;
@@ -243,24 +216,30 @@ var PostView = (function(){
             var helpStatus = DataOp.getHelpStatus();
             if(!helpStatus["ARTICLE"]){
                 //Show the first time help overlay of article
-                $(".imgHelpOverlay").addClass("show").css("background-image","url('img/help_overlay/article.png')");
+                $(".imgHelpOverlay").addClass("show");
                 helpStatus["ARTICLE"] = true;
                 DataOp.setHelpStatus(helpStatus);
             }
             var html = "";
+            html += "<div class='postFullContWrapper'>";
             html += "<div class='postFullCont'>";
             //Title
             html += "<div class='title'>"+post.title+"</div>";
             //Publish date
-            html += "<div class='date'>"+new Date(new Date(post.pubdate).toISOString().substring(0,10)).toDateString()+"</div>";
+           
+            html += "<div class='audate'>";
+            html += "<div class='date'>"+new Date(new Date(post.pubdate).toISOString().substring(0,10)).toDateString().substring(4,30)+"&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp</div>";
             //Author
-            html += "<div class='author'>"+ (post.author || post.item_author || "") +"</div>";
+            html += "<div class='author' >"+ (post.author || post.item_author || "") +"</div>";
+            html += "</div>";
             //Image of article
             if(post.image && post.image.url){
                 html += "<div class='image' data-src='"+post.image.url+"' style='background-image:url(\""+post.image.url+"\");'></div>";
             }
             //Description. Removing any strong tags since it is resulting in cutting of text on the edges
-            html += "<div class='content'>"+(post.description.replace(/\<\/*strong\>/g,""))+"</div>";
+            //
+            html += "<div class='content'><div class='postDisclaimer'>"+("This article is being displayed originally from this <a href='"+post.guid+"'>link.</a></div>")+(post.description.replace(/\<\/*strong\>/g,""))+"</div>";
+            html += "</div>";
             html += "</div>";
             $("._wrapper .postFull").html(html);
         }

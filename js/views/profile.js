@@ -10,6 +10,7 @@ var ProfileView = (function(){
         if(r){
             window.localStorage.removeItem("user");
             window.localStorage.removeItem("articles");
+            window.localStorage.removeItem("vyg_collection");
             app.user = null;
             DataOp.collection = {};
             app.savedArticles = {};
@@ -82,6 +83,8 @@ var ProfileView = (function(){
 
         type : "profile",
 
+        el : ".userProfile",
+
         fetchData : function(c){
             this.data = app.user;
             c();
@@ -91,6 +94,7 @@ var ProfileView = (function(){
             $(".userProfile .changePass").html("CHANGE PASSWORD");
             $(".userProfile input.password").val("").hide();
             $("._wrapper .userProfile .email").html(this.data.email);
+            $(".userProfile .message").html("");
         },
 
         viewLoaded : function(){

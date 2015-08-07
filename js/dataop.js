@@ -1,7 +1,7 @@
 var DataOp = (function(){
     return {
 
-        collection : {},
+        collection : undefined,
 
         /**
          * Sync up the saved articles to the server,
@@ -81,8 +81,8 @@ var DataOp = (function(){
          */
         sendMail : function(params){
             $.ajax( { 
-                url: "https://api.sendgrid.com/api/mail.send.json",
-                data: "api_user=&api_key=&to="+(params.to)+"&toname="+(params.toname||"")+"&subject="+(params.subject || "")+"&html="+(encodeURIComponent(params.body) || "")+"&from="+(params.from || "support@voyageapp.in")+"&fromname="+(params.fromname || ""),
+                url: app.config.END_POINTS["SENDGRID"],
+                data: "to="+(params.to)+"&toname="+(params.toname|| params.to)+"&subject="+(params.subject || "Hey")+"&msg="+(encodeURIComponent(params.body) || "")+"&from="+(params.from || "team@opsight.in")+"&fromname="+(params.fromname || "Team Opsight"),
                 type: "POST"
             }).done(function(){
             });
@@ -111,16 +111,18 @@ var DataOp = (function(){
          * @param  {[type]} dontShowError -  TRUE: dont show the alert to the user if some error has occured.
          * @param  {[type]} dontTimeout   - TRUE : dont timeout on the request
          */
-        loadURL : function(params,dontShowError,dontTimeout){
+        loadURL : function(params,dontShowError,dontTimeout,callC){
             var options = { 
                 url: params.u,
                 data: params.d || null,
                 type: params.t || "POST",
-                contentType : params.contentType,
                 beforeSend : function(xhr){
                     xhr.setRequestHeader("Authorization", "Basic "+app.config["END_POINTS"]["AUTH_HEADER"]);
                 }
             };
+            if(params.contentType){
+                options["contentType"] = params.contentType;
+            }
             if(!dontTimeout){
                 options["timeout"] = 30000;
             }
@@ -132,14 +134,17 @@ var DataOp = (function(){
                 if(!dontShowError){
                     setTimeout(function(){
                         var conn = Util.checkConnection();
+                        UIRender.hideLoader();    
                         if(!conn.isOn){
-                            alert("Please check your network connection and then try again.");
+                            UIRender.showInfoMessage("Please check your network connection and then try again.",true);
                         }else{
                             //Whatever error; we just quit. We can be more granular than this.
-                            alert("Oops, our bad. Can you please try again launching the app.");
+                            UIRender.showInfoMessage("There seems to be a problem with network. Please try again in sometme.",true);
                         }
-                        navigator.app.exitApp();
-                        UIRender.hideLoader();    
+                        if(callC && params.c){
+                            //Call the callback even if global error msg is displayed.
+                            params.c(data);
+                        }
                     },2000);
                 }else if(params.c){
                     params.c(data);
@@ -155,6 +160,8 @@ var DataOp = (function(){
             helpStatus = helpStatus ? JSON.parse(helpStatus) : {};
             return helpStatus;
         },
+
+
         /**
          * Setters for the help status into localStorage
          * @method setHelpStatus
@@ -164,10 +171,36 @@ var DataOp = (function(){
         },
 
         getModel : function(key){
+            if(!this.collection){
+                if(Util.checkConnection() && app.shouldBeRefreshed){
+                    //When drawing on app launch and app update should happen.
+                    this.collection = {};
+                }else{
+                    this.collection = (localStorage.getItem('vyg_collection') ? JSON.parse(localStorage.getItem('vyg_collection')) : {});    
+                }
+            }
             return this.collection[key] || [];
         },
+
+        getNextUpdateTime : function(){
+            return parseFloat(localStorage.getItem("nextUpdate"));
+        },
+
         setModel : function(key,model){
-            this.collection[key] = model;
+            if(key == "home"){
+                localStorage.setItem("nextUpdate",waqt.nextDate(app.config["LOGIC_CONFIG"]["REFRESH_TRIGGER"]["hrs"],app.config["LOGIC_CONFIG"]["REFRESH_TRIGGER"]["mins"]));    
+                if(app.shouldBeRefreshed){
+                    //If articles were refreshed then we should clear out the local cache for every key.
+                    app.shouldBeRefreshed=false;  
+                    this.collection = {};  
+                    $.publish("/vyg/refreshToggle",[]);
+                }
+                //Just for the sake for setting a timer for next update if the app stays in background forever
+                app.checkForRefresh();
+            }
+            //At max we are going to store only 80 articles
+            this.collection[key] = model.slice(0,80);
+            localStorage.setItem("vyg_collection",JSON.stringify(this.collection));
         }
 
     };

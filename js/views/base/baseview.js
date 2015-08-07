@@ -53,10 +53,7 @@ var BaseView = (function(){
                         clearInterval(checkL);
                         $("._wrapper .logo").hide();
                         this.render();  
-                        $.when(UIRender.manageViews({
-                            type : this.type,
-                            name : this.headerTitle
-                        })).then(function(){
+                        $.when(UIRender.manageViews(this)).then(function(){
                             this.viewLoaded();
                         }.bind(this));
                     }
@@ -67,10 +64,7 @@ var BaseView = (function(){
         renderMore : function(){
             this.fetchData(function(){
                 this.render();  
-                $.when(UIRender.manageViews({
-                    type : this.type,
-                    name : this.headerTitle
-                })).then(function(){
+                $.when(UIRender.manageViews(this)).then(function(){
                     this.viewLoaded();
                 }.bind(this));
             }.bind(this));

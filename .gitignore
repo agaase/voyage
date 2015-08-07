@@ -1,6 +1,7 @@
 #random files
 .DS_Store
 config/config.json
+config/config_dev.json
 dist/css/*
 dist/js/*
 npm-debug.log

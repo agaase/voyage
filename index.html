@@ -36,11 +36,15 @@
            <!-- THE LOADER VIEW -->
            <div class='loaderOverlay'>
              <div class='message'></div>
+             <div class="spinner" >
+              </div>
            </div>
+
+           <div id='infoMessage'></div>
 
            <!-- MAIN LOGO/SPLASH SCREEN-->
            <div class='logo main'>
-              <div class='heading'>VOYAGE</div>
+              <div class='heading'></div>
               <div class='writeup'>
                 Not news, but articles which give you the big picture and the finer details.
               </div>
@@ -58,10 +62,11 @@
            <!-- TOOLBAR -->
            <div id='header'>
                 <div class='progress'></div>
-                <div class='back headerBtn'><</div>
+                <div class='back headerBtn'></div>
                 <div class='pageLogo'></div>
                 <div class='title'></div>
                 <div class='menu headerBtn'></div>
+                <div class='refreshI'></div>
                 <div class='save headerBtn'></div>
                 <div class='share headerBtn'></div>
            </div>
@@ -69,7 +74,7 @@
            <!-- SECTIONS -->
            <div class='sections'>
                 <div class='link home'>Home</div>
-                <div class='link allthemes'>All themes</div>
+                <div class='link allthemes'>My themes</div>
                 <div class='link saved'>Saved Articles</div>
                 <div class='link profile'>Profile</div>
            </div>
@@ -86,8 +91,8 @@
 
            <!--- USER LOGIN/REGISTRATION -->
            <div class="userForm">
-              <div class="logoForm">VOYAGE</div>
-              <div class="loginMsg" style="margin-bottom: 30px;font-size: 80%;">Click login if you already have an email id setup.</div>
+              <div class="logoForm">Opsight</div>
+              <div class="loginMsg">Click login if you already have an email id setup.</div>
               <input type="email" class='email' placeholder="Choose an email"/>
               <input type="password" class='password' placeholder="Choose password"/>
               <div class="btn btn1 register" >REGISTER</div>

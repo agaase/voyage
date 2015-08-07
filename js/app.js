@@ -5,6 +5,8 @@ var app = {
      */
     user : undefined,
 
+    viewStack : [],
+
     /**
      * Global object containing all the saved articles.
      */
@@ -21,6 +23,24 @@ var app = {
         app.startFlow();    
     },
 
+    checkForRefresh : function(){
+        var nextUpdRefresh = localStorage.getItem('nextUpdate');
+        if(!nextUpdRefresh){
+            nextUpdRefresh = waqt.nextDate(app.config["LOGIC_CONFIG"]["REFRESH_TRIGGER"]["hrs"],app.config["LOGIC_CONFIG"]["REFRESH_TRIGGER"]["mins"]);
+            localStorage.setItem("nextUpdate",nextUpdRefresh);
+        }
+        var d = new Date(parseFloat(nextUpdRefresh));
+        if(new Date() >=  d){
+                app.shouldBeRefreshed = true;
+                $.publish("/vyg/refreshToggle",[]);
+                clearTimeout(app.refreshTimer);
+        }else{
+            app.refreshTimer = setTimeout(function(){
+                app.checkForRefresh();
+            }, (d - new Date()));
+        }
+    },
+
     /**
      * This is the starting point of the application.
      * @method startFlow
@@ -28,25 +48,31 @@ var app = {
     startFlow : function(){
         //Check if the connection is on.
         var connection = Util.checkConnection();
-        if(connection.isOn){
-            Util.getConfig(function(d){
-                app.config = d;
-                //Get the locally stored user object
-                app.user = window.localStorage.getItem("user");
-                //Get the locally stored saved articles.
-                app.savedArticles = window.localStorage.getItem("articles");
-                app.savedArticles = app.savedArticles ? JSON.parse(app.savedArticles) : {};
-                //This will be useful if the app closed and the saved posts didnt get time to sync with the server.
-                DataOp.updateSavedPosts();
-                Util.preloadIcons(function(){
-                    if(app.user){
-                        app.user = JSON.parse(app.user);
-                        app.user.themes = app.user.themes || [];
-                    }
-                    UIRender.drawHome();
-                });
+        if(!connection.isOn){
+            UIRender.showInfoMessage("Cannot connect to internet",true,2000);
+        }
+        Util.getConfig(function(d){
+            app.config = d;
+            //Get the locally stored user object
+            app.user = window.localStorage.getItem("user");
+            //Get the locally stored saved articles.
+            app.savedArticles = window.localStorage.getItem("articles");
+            app.savedArticles = app.savedArticles ? JSON.parse(app.savedArticles) : {};
+            //This will be useful if the app closed and the saved posts didnt get time to sync with the server.
+            DataOp.updateSavedPosts();
+
+            Util.preloadIcons(function(){
+                if(app.user){
+                    app.user = JSON.parse(app.user);
+                    app.user.themes = app.user.themes || [];
+                }
+                UIRender.initialise();
+                app.checkForRefresh();
+                UIRender.drawHome();
             });
-        }else{
+        });
+        /*
+        else{
             try{
                 var r = confirm("Looks like your network is down. Please check and click ok to retry.");
                 if(r){
@@ -62,6 +88,7 @@ var app = {
                 alert(err);
             }
         }
+        */
     }
 };
 
