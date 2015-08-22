@@ -30,11 +30,15 @@ var ThemesView = (function(){
                     v.isChoosen = true;
                 }
             }.bind(this));
+            var buckets = Util.getThemeBuckets(this.allThemes);
             var html = "<div class='done'>"+app.config["APP_MESSAGES"]["THEMES_PAGE_MSG"]+"</div>";
             html += "<div class='themesC' style=display: inline-block;'height:"+(window.innerHeight-124)+"px;'>";
-            
-            $.each(this.allThemes,function(k,theme){
-                html += "<div class='theme' data-id='"+k+"'><div class='catImg' style='background-image:url(\""+theme.img+"\");'></div><div class='title "+(theme.isChoosen ? "select" : "")+"'>"+theme.category_title+"</div><div class='checkboxW "+(theme.isChoosen ? "selected" : "")+"'><div class='checkbox'></div></div> </div>";
+            $.each(buckets,function(bck,themes){
+                html += "<div class='themeBucket'>";
+                $.each(themes,function(i,theme){
+                    html += "<div class='theme "+(theme.isChoosen ? "selected" : "")+"' data-id='"+theme.id+"'><div class='title'>"+theme.category_title+"</div> </div>";
+                });
+                html += "</div>";
             });
             html += "<div class='de'></div>";
             var p=app.config.THEMES;
@@ -43,11 +47,11 @@ var ThemesView = (function(){
         },
 
         viewLoaded : function(){
-            var orginalThemes = $(".theme .title.select").map(function(){return $(this).text();}).toArray();
-            $("._wrapper .theme .checkboxW").gwClick(function(el){
+            var orginalThemes = $(".theme.selected").map(function(){return $(this).data("id");}).toArray();
+            $("._wrapper .theme").gwClick(function(el){
                 el.toggleClass("selected");
-                el.parent().find(".title").toggleClass("select");
-                var themes = $(".theme .title.select").map(function(){return $(this).text();}).toArray();
+                //el.parent().find(".title").toggleClass("select");
+                var themes = $(".theme.selected").map(function(){return $(this).data("id");}).toArray();
                 if(themes.length>=2 && orginalThemes.sort().join() != themes.sort().join()){
                     //Only show the button once three themes are selected.
                     $('._wrapper .done').addClass("btn").html("SAVE");
@@ -58,7 +62,7 @@ var ThemesView = (function(){
                 "data-timeout" : 100
             });
             var t;
-
+            /*
             $("._wrapper .theme .title,._wrapper .theme .catImg").gwClick(function(el){
                 var par = el.parent();
                 var cid = par.data("id");
@@ -85,14 +89,15 @@ var ThemesView = (function(){
             }.bind(this),{
                 "data-timeout" : 100
             });
+            */
  
             $("._wrapper .done").gwClick(function(el){
                 if(!el.hasClass("btn")){
                     return;
                 }
                 var themes;
-                if($(".theme .checkboxW.selected").length){
-                    themes = $(".theme .checkboxW.selected").map(function(){return $(this).parent().data("id");}).toArray();
+                if($(".themesC .theme.selected").length){
+                    themes =$(".themesC .theme.selected").map(function(){return $(this).data("id");}).toArray();
                     if(orginalThemes.sort().join() != themes.sort().join()){
                         //Only update if we have different set of themes.
                         UIRender.toggleLoader(); 

@@ -136,6 +136,42 @@ html::-webkit-scrollbar {
   background-position: center;
   position: relative;
   padding-top: 1px; }
+  ._wrapper .allThemes {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    -webkit-transition: all linear 0.2s;
+    -webkit-transform: scale(0, 0);
+    z-index: 3; }
+    ._wrapper .allThemes .allThemesCont {
+      height: auto;
+      background-color: #3eb3da;
+      margin: 50px 30px;
+      box-shadow: 0 0 5px #000;
+      padding: 20px 15px;
+      text-align: center;
+      color: #fff;
+      border-radius: 2px; }
+      ._wrapper .allThemes .allThemesCont .themeBucket:nth-last-child(1) {
+        margin-bottom: 0; }
+      ._wrapper .allThemes .allThemesCont .themeBucket {
+        margin-bottom: 25px; }
+        ._wrapper .allThemes .allThemesCont .themeBucket .th {
+          display: inline-block;
+          padding: 5px 10px;
+          background-color: #f1c40f;
+          margin: 5px;
+          font-size: 95%; }
+      ._wrapper .allThemes .allThemesCont .label {
+        margin-bottom: 20px; }
+        ._wrapper .allThemes .allThemesCont .label .labelMsg {
+          font-size: 85%;
+          margin-top: 5px;
+          font-family: "News Cycle", sans-serif; }
+  ._wrapper .allThemes.show {
+    -webkit-transform: scale(1, 1); }
+  ._wrapper .allThemes.bgShow {
+    background-color: rgba(255, 255, 255, 0.5); }
   ._wrapper #infoMessage {
     position: fixed;
     width: 90%;
@@ -297,7 +333,7 @@ html::-webkit-scrollbar {
     background-image: url(../img/logo.png); }
   ._wrapper .logo .writeup {
     display: none;
-    margin: 40px 15px;
+    margin: 30px 15px;
     text-align: center;
     padding: 10px;
     border: 2px solid #F1C40F;
@@ -346,15 +382,13 @@ html::-webkit-scrollbar {
     box-shadow: #AAA 0 3px 4px;
     background-color: #fff; }
     ._wrapper .posts .post .metainfoWrapper {
-      height: 35px;
       margin-top: 20px;
-      text-align: center; }
+      text-align: center;
+      padding: 0 15px; }
       ._wrapper .posts .post .metainfoWrapper .metainfo {
-        display: inline-block;
         line-height: 20px;
         color: #9B9B9B;
-        height: 100%;
-        line-height: 35px; }
+        height: 100%; }
       ._wrapper .posts .post .metainfoWrapper .metainfo.progress {
         padding-top: 19px;
         margin-right: 90%;
@@ -367,13 +401,36 @@ html::-webkit-scrollbar {
         top: 20px;
         left: 91%;
         font-size: 75%; }
+      ._wrapper .posts .post .metainfoWrapper .metainfo.themeNames {
+        position: relative;
+        height: 30px;
+        display: inline-block;
+        text-align: center; }
+        ._wrapper .posts .post .metainfoWrapper .metainfo.themeNames .th {
+          padding: 0px 10px;
+          height: 25px;
+          line-height: 22px;
+          background-color: #3eb3da;
+          margin-right: 15px;
+          font-size: 90%;
+          color: #fff;
+          min-width: 45px;
+          margin-top: 2px;
+          border-radius: 2px;
+          display: inline-block;
+          text-align: center;
+          font-family: "News Cycle", sans-serif;
+          font-weight: bold;
+          margin-bottom: 10px; }
+        ._wrapper .posts .post .metainfoWrapper .metainfo.themeNames .th:nth-last-child {
+          margin-right: 0; }
       ._wrapper .posts .post .metainfoWrapper .metainfo.themeName {
         background-size: 12px;
         background-repeat: no-repeat;
         text-transform: up;
         font-size: 85%;
         background-position: 31% center;
-        width: 42%;
+        width: 100px;
         line-height: 32px;
         text-align: center;
         height: 30px;
@@ -390,13 +447,16 @@ html::-webkit-scrollbar {
           background-size: 50%;
           background-repeat: no-repeat; }
       ._wrapper .posts .post .metainfoWrapper .metainfo.source {
-        text-align: center;
-        font-size: 90%;
-        width: 38%;
-        font-family: "News Cycle",sans-serif;
-        padding: 0 1%;
+        text-align: right;
+        font-size: 80%;
+        font-family: "News Cycle", sans-serif;
+        padding: 0 4%;
         vertical-align: top;
-        overflow: hidden; }
+        overflow: hidden;
+        display: inline-block;
+        line-height: 28px;
+        height: 30px;
+        font-weight: bold; }
     ._wrapper .posts .post .title {
       text-align: center;
       font-size: 110%;
@@ -538,7 +598,9 @@ html::-webkit-scrollbar {
   display: none;
   background-color: #fbfbfb; }
   ._wrapper .themes .themesC {
-    overflow: scroll; }
+    overflow: scroll;
+    padding: 15px;
+    text-align: center; }
   ._wrapper .themes .themesC::-webkit-scrollbar {
     width: 0 !important; }
   ._wrapper .themes .de.show {
@@ -621,11 +683,20 @@ html::-webkit-scrollbar {
     padding: 0; }
   ._wrapper .themes .none.theme {
     display: none; }
+  ._wrapper .themes .theme.selected {
+    background-color: #3eb3da;
+    color: #ffffff; }
+  ._wrapper .themes .themeBucket {
+    margin-bottom: 30px; }
   ._wrapper .themes .theme {
     position: relative;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #EFEFEF;
-    padding-top: 20px; }
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border: 2px solid #3eb3da;
+    border-radius: 4px;
+    color: #3eb3da;
+    font-size: 90%; }
     ._wrapper .themes .theme .catImg {
       display: inline-block;
       width: 10%;
@@ -646,11 +717,7 @@ html::-webkit-scrollbar {
     ._wrapper .themes .theme .title {
       font-size: 100%;
       display: inline-block;
-      width: 55%;
-      height: 50px;
-      line-height: 50px;
-      vertical-align: middle;
-      font-weight: bold; }
+      vertical-align: middle; }
     ._wrapper .themes .theme .checkboxW {
       height: 50px;
       width: 70px;
@@ -830,6 +897,15 @@ html::-webkit-scrollbar {
     right: 10px;
     background-image: url("../img/addfav.png");
     display: none; }
+  #header .allTh {
+    height: 44px;
+    width: 44px;
+    position: absolute;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-image: url(../img/themes.png);
+    right: 80px; }
   #header .share {
     right: 65px;
     display: none;
@@ -862,7 +938,7 @@ html::-webkit-scrollbar {
     background-image: url(../img/back.png); }
   #header .refreshI {
     background-image: url(../img/refresh.png);
-    right: 65px; }
+    right: 145px; }
   #header .menu {
     background-image: url(../img/menu.png);
     right: 10px; }
@@ -933,6 +1009,8 @@ html::-webkit-scrollbar {
   box-shadow: #000000 0 2px 2px -2px; }
   #header.post_context .progress, #header.post_context .save, #header.post_context .share, #header.post_context .back {
     display: block; }
+  #header.post_context .allTh {
+    display: none; }
 
 #header.noThemes .menu {
   display: none; }

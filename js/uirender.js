@@ -113,6 +113,7 @@ var UIRender = (function(){
                       
               }else{
                   var themeView = new ThemesView();
+                  app.user.justRegistered = false;
                   //If themes are not selected yet; draw the themes page asking user to select some themes.
                   var checkL = setInterval(function(){
                       //It waits for the logo overlay which will be there if this 
@@ -132,10 +133,15 @@ var UIRender = (function(){
 
         manageViews : function(view,fromStack){
             if(fromStack){
-              var currentView = app.viewStack.pop();
-              var view =  app.viewStack[app.viewStack.length-1];
-            }else{
-              var currentView = app.viewStack.length ? app.viewStack[app.viewStack.length-1] : undefined;
+              //If we have to pull it from stack
+              view = app.viewStack.pop();
+            }else if(app.currentView && app.currentView.type.match(/(home|saved|posts)/gi) && (view.type != app.currentView.type || (view.theme && view.theme != app.currentView.theme))){
+              //Else if a new view is drawn, lets push old view to stack (only if articles page and view is different"
+              if(app.viewStack.length > 2){
+               //At max we keep 3 views in stack
+               app.viewStack.splice(0,1);  
+              }
+              app.viewStack.push(app.currentView);
             }
             var def = $.Deferred();
             var cont = $("._wrapper");
@@ -159,8 +165,9 @@ var UIRender = (function(){
               }
 
 
-              if( !currentView || view.type != currentView.type){
-                      if( !currentView || view.el != currentView.el ){
+              if( !app.currentView || view.type != app.currentView.type || (view.theme && view.theme != app.currentView.theme)){
+                  //Only if first time render, current view type is not same as old view, if its a different theme
+                      if( !app.currentView || view.el != app.currentView.el){
                         //Only if current vip
                         //ew is not same as old view
                         this.toggleLoader(true);
@@ -185,19 +192,11 @@ var UIRender = (function(){
                         view.loadFromCache();
                         $(".main").scrollTop(0);  
                       }
-                  if(!fromStack){
-                      //If not from stack; lets add this to stack
-                      if(app.viewStack.length > 2){
-                        //At max we keep 3 views in stack
-                        app.viewStack.splice(0,1);  
-                      }
-                      app.viewStack.push(view);
-                  }
               }else{
                   this.toggleLoader(true);
                   def.resolve(view.type);
               }
-              currentView = view;
+              app.currentView = view;
             }.bind(this),isSectionsOpen ? 500 :  50);
             return def.promise(view.type);
         },

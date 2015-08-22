@@ -164,6 +164,58 @@ $duration: 1.4s;
     position: relative;
     padding-top: 1px;
 
+
+    .allThemes{
+        position:fixed;
+        height: 100%;
+        width: 100%;
+        -webkit-transition:  all linear 0.2s;
+        -webkit-transform: scale(0, 0);
+        z-index: 3;
+
+
+        .allThemesCont{
+            height: auto;
+            background-color: #3eb3da;
+            margin: 50px 30px;
+            box-shadow: 0 0 5px #000;
+            padding: 20px 15px;
+            text-align: center;
+            color: #fff;
+            border-radius: 2px;
+            
+            .themeBucket:nth-last-child(1){
+                margin-bottom: 0;
+            }
+            .themeBucket{
+                margin-bottom: 25px;
+
+                .th{
+                    display: inline-block;
+                    padding: 5px 10px;
+                    background-color: #f1c40f;
+                    margin: 5px;
+                    font-size: 95%;
+                }
+                
+            }
+            .label{
+                margin-bottom: 20px;
+                .labelMsg{
+                    font-size: 85%;
+                    margin-top: 5px;
+                    font-family: $font-stack-info;
+                }
+            }
+        }
+    }
+    .allThemes.show{
+        -webkit-transform: scale(1, 1);
+    }
+    .allThemes.bgShow{
+        background-color: rgba(255,255,255,0.5);
+    }
+
     #infoMessage{
         position: fixed;
         width: 90%;
@@ -369,7 +421,7 @@ $duration: 1.4s;
     }
     .writeup {
         display: none;
-        margin: 40px 15px;
+        margin: 30px 15px;
         text-align: center;
         padding: 10px;
         border: 2px solid #F1C40F;
@@ -433,16 +485,14 @@ $duration: 1.4s;
         background-color: #fff;
 
         .metainfoWrapper{
-            height: 35px;
             margin-top:20px;
             text-align: center;
+            padding: 0 15px;
 
             .metainfo{
-                display: inline-block;
                 line-height: 20px;
                 color: $secondary-font-color;
                 height: 100%;
-                line-height: 35px;
             }
             .metainfo.progress{
                 padding-top: 19px;
@@ -457,13 +507,40 @@ $duration: 1.4s;
                 left: 91%;
                 font-size: 75%;
             }
+            .metainfo.themeNames{
+                position: relative;
+                height: 30px;
+                display: inline-block;
+                text-align: center;
+                .th{
+                    padding: 0px 10px;
+                    height: 25px;
+                    line-height: 23.5px;
+                    background-color: #3eb3da;
+                    margin-right: 15px;
+                    font-size: 90%;
+                    color: #fff;
+                    min-width: 45px;
+                    margin-top: 2px;
+                    border-radius: 2px;
+                    display: inline-block;
+                    text-align: center;
+                    font-family: $font-stack-info;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                .th:nth-last-child{
+                    margin-right: 0;
+                }
+            }
+
             .metainfo.themeName{
                     background-size: 12px;
                     background-repeat: no-repeat;
                     text-transform: up;
                     font-size: 85%;
                     background-position: 31% center;
-                    width: 42%;
+                    width: 100px;
                     line-height: 32px;
                     text-align: center;
                     height: 30px;
@@ -483,13 +560,16 @@ $duration: 1.4s;
                 }
             }
             .metainfo.source {
-                    text-align: center;
-                    font-size: 90%;
-                    width: 38%;
-                    font-family: "News Cycle",sans-serif;
-                    padding: 0 1%;
+                    text-align: right;
+                    font-size: 80%;
+                    font-family: $font-stack-info;
+                    padding: 0 4%;
                     vertical-align: top;
                     overflow: hidden;
+                    display: inline-block;
+                    line-height: 28px;
+                    height: 30px;
+                    font-weight: bold;
             }
         }
         .title {
@@ -669,6 +749,8 @@ $duration: 1.4s;
     background-color: #fbfbfb;
         .themesC{
             overflow: scroll;
+            padding: 15px;
+            text-align: center;
         }
         .themesC::-webkit-scrollbar { 
             width: 0 !important 
@@ -764,11 +846,22 @@ $duration: 1.4s;
     .none.theme{
         display:none;
     }
+    .theme.selected{
+            background-color: $primary-bg-color;
+            color: #ffffff; 
+    }
+    .themeBucket{
+        margin-bottom: 30px;
+    }
     .theme {
-        position: relative;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #EFEFEF;
-        padding-top: 20px;
+            position: relative;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 2px solid $primary-bg-color;
+            border-radius: 4px;
+            color : $primary-bg-color;
+            font-size: 90%;
 
         .catImg{
             display: inline-block;
@@ -793,13 +886,9 @@ $duration: 1.4s;
         }
         .title
         {
-            font-size: 100%;;
+            font-size: 100%;
             display: inline-block;
-            width: 55%;
-            height: 50px;
-            line-height: 50px;
             vertical-align: middle;
-            font-weight: bold;
         }
 
         .checkboxW{
@@ -1033,6 +1122,16 @@ $duration: 1.4s;
         background-image:url("../img/addfav.png");
         display: none;
     }
+    .allTh{
+        height: 44px;
+        width: 44px;
+        position: absolute;
+        background-size: 24px;
+        background-repeat: no-repeat;
+        background-position: center right;
+        background-image: url(../img/themes.png);
+        right: 80px;
+    }
     .share{
         right: 65px;
         display: none;
@@ -1070,7 +1169,7 @@ $duration: 1.4s;
     }
     .refreshI{
         background-image: url(../img/refresh.png);
-        right: 65px;
+        right: 145px;
     }
     .menu{
         background-image: url(../img/menu.png);
@@ -1163,6 +1262,9 @@ $duration: 1.4s;
     display: block;
     .progress,.save,.share,.back{
         display: block;
+    }
+    .allTh{
+        display: none;
     }
     box-shadow: #000000 0 2px 2px -2px;
 }

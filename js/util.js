@@ -8,9 +8,24 @@ var Util = (function(){
          * @param  {function}  c - Callback to call.
          */
         getConfig : function(c){
-            $.getJSON("config/config_dev.json",function(d){
+            $.getJSON("config/config.json",function(d){
                 c(d);
             });
+        },
+
+        getThemeBuckets : function(th){
+            var buckets = {};
+            $.each(th,function(k,v){
+                if(!v.disable){
+                    v.id = k;
+                    if(buckets[v.bucket]){
+                        buckets[v.bucket].push(v);
+                    }else{
+                        buckets[v.bucket] = [v];
+                    }
+                }
+            });
+            return buckets;
         },
 
          /**

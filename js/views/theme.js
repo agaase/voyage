@@ -18,6 +18,13 @@ var ThemeView = (function(){
             html += "<div class='summary'   >"+ ( post.summary || post.description.replace(/<\/?[^>]+(>|$)/g,"").substring(0,250).match(/[^]*\s/).toString())+"</div>";
             html += "<div class='metainfoWrapper'>";
             html += "<div class='metainfo source'>"+post.feedTitle+"</div>";
+            html += "<div class='metainfo themeNames' >";
+            $.each(post.categories.split(","),function(i,v){
+                if(this.theme != v &&  app.user.themes.indexOf(v)>-1 && !app.config.THEMES[v].disable){
+                    html += "<div class='th' data-id='"+v+"'>"+app.config.THEMES[v].category_title+"</div>";
+                }
+            }.bind(this));
+            html += "</div>";
 
             if(isInProgress){
                 var savedPost = app.savedArticles[post._id];
@@ -32,6 +39,7 @@ var ThemeView = (function(){
         headerTitle : null,
 
         constructor : function(theme){
+            this.id = this.theme;
             this.theme = theme;
             this.modelKey = theme;
             this.headerTitle = app.config.THEMES[theme].category_title;
@@ -47,7 +55,7 @@ var ThemeView = (function(){
                         "field": "publish_on"
                       }
                   },
-                  {"term" : {"categories":this.theme}}
+                  {"term" : {"categories":this.theme.toLowerCase()}}
                 ]
               };
         }

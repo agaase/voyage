@@ -5,16 +5,16 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         minSuffix: 'min',
-        distName: 'voyage',
+        distName: 'opsight',
         cssName: 'index',
         meta: {
             version: '<%= pkg.version %>',
-            banner: '/*! voyage.js - v<%= meta.version %> - ' +
+            banner: '/*! opsight.js - v<%= meta.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 '* https://github.com/agaase/\n' +
                 '* Copyright (c) <%= grunt.template.today("yyyy") %> ' +
                 'agaase; Licensed MIT */\n',
-            css: '/*! voyage.css - v<%= meta.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n' + '* ' + '* Copyright (c) <%= grunt.template.today("yyyy") %> ' + '; Licensed MIT */\n'
+            css: '/*! opsight.css - v<%= meta.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n' + '* ' + '* Copyright (c) <%= grunt.template.today("yyyy") %> ' + '; Licensed MIT */\n'
 
         },
         clean: {

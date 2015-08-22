@@ -21,6 +21,16 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.startFlow();    
+        /*
+        if(typeof(Pushbots) !=="undefined"){
+            Pushbots.Plugin.initialize("55c6f9b7177959124c8b4568");
+        }
+        */
+    
+        if(PushbotsPlugin.isAndroid()){
+            PushbotsPlugin.initializeAndroid("55c6f9b7177959124c8b4568", "552982353176");
+        }
+        
     },
 
     checkForRefresh : function(){

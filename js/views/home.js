@@ -1,3 +1,4 @@
+
 var HomeView = (function(){
      
     var obj = BasePostsView.extend({
@@ -10,7 +11,7 @@ var HomeView = (function(){
             html += "<div class='post "+ (isInProgress ? " inProgress" : "")+ (timeAdded ? " noBorder" : "")+"' data-pos='"+this.count+"' data-id='"+post._id+"'>";
             html += "<div class='title'>"+post.title+"</div>";
             
-        if(post.image && post.image.url){
+            if(post.image && post.image.url){
                 //console.log(JSON.stringify(post.image));
                 html += "<div class='image' style='background-image:url(\""+post.image.url+"\")'></div>";
             }
@@ -19,8 +20,15 @@ var HomeView = (function(){
             html += "<div class='metainfoWrapper'>";
             
             var cat = app.config.THEMES[post.categories.split(",")[0]];
-            html += "<div class='metainfo themeName' data-id='"+post.categories+"'><span class='catImage' style='background-image:url(\""+cat.img+"\")'></span><span>"+cat.category_title+"</span></div>";
             html += "<div class='metainfo source'>"+post.feedTitle+"</div>";
+            html += "<div class='metainfo themeNames' >";
+            $.each(post.categories.split(","),function(i,v){
+                if(app.user.themes.indexOf(v)>-1 && !app.config.THEMES[v].disable){
+                    html += "<div class='th' data-id='"+v+"'>"+app.config.THEMES[v].category_title+"</div>";    
+                }
+            });
+            html += "</div>";
+            
             if(isInProgress){
                 var savedPost = app.savedArticles[post._id];
                 html += "<div class='metainfo progress'>"+savedPost.progress+"%</div> ";

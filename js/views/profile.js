@@ -14,6 +14,7 @@ var ProfileView = (function(){
             app.user = null;
             DataOp.collection = {};
             app.savedArticles = {};
+            app.viewStack = [];
             c(r);
         }else{
             c();

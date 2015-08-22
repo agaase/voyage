@@ -8,11 +8,17 @@ var BasePostsView = (function(){
             var mins = d.getMinutes();
             var half = hrs >= 12 ? "PM" : "AM";
             hrs = hrs > 12 ? hrs-12  : hrs;
-            if(d.toString().substring(0,10) == cd.toString().substring(0,10)){
-                return "today at "+hrs +(mins ? ":"+mins  : "")+"&nbsp;"+half;
-            }else {
-                return "tomorrow at "+hrs +(mins ? ":"+mins  : "")+"&nbsp;"+half;
+            var toShow = app.config["LOGIC_CONFIG"]["REFRESH_TRIGGER"]["showTime"];
+            if(new Date().toString().match(/tzif/gi)){
+                return "at "+toShow;
+            }else{
+                if(d.toString().substring(0,10) == cd.toString().substring(0,10)){
+                    return "today at "+hrs +(mins ? ":"+mins  : "")+"&nbsp;"+half;
+                }else {
+                    return "tomorrow at "+hrs +(mins ? ":"+mins  : "")+"&nbsp;"+half;
+                }    
             }
+            
     };
    
     var obj = BaseView.extend({
@@ -76,14 +82,15 @@ var BasePostsView = (function(){
                 }
                 cont.append(html);    
                 
-                if(!$(".loadmore",cont).length){
+                if(!$(".loadmore",cont).length && this.count >= app.config["LOGIC_CONFIG"]["INC_POST_FETCH_COUNT"]){
                     //This is essentialy the case when its rendering the articles first time.
                     cont.append("<div class='loadmore'>LOAD MORE</div>");
                 }else{
                     $(".loadmore",cont).appendTo(cont).removeClass("loading");
                 }
             }
-            if(start ==  this.count || this.count>= 200){
+           
+            if(start ==  this.count || this.count>= 300){
                $(".loadmore",cont).appendTo(cont).removeClass("loading");
                $(".loadmore",cont).html("There are no more articles to load").addClass("nomore");
             }
@@ -166,7 +173,7 @@ var BasePostsView = (function(){
                 var postView = new PostView(postData);
                 postView.launch();  
             }.bind(this));
-            $(".post:not(.empty) .metainfo.themeName",cont).unbind("click").on("click",function(ev){
+            $(".post:not(.empty) .metainfo .th",cont).unbind("click").on("click",function(ev){
                 var el = $(ev.currentTarget);
                 el.css("opacity",0.5);
                 UIRender.toggleLoader();
@@ -208,7 +215,16 @@ var BasePostsView = (function(){
                     q["query"]["filtered"]["filter"]["bool"]["must"].push({
                         "range" : {
                             "publish_on" : {
-                                "lt" : new Date(DataOp.getNextUpdateTime() - ((24*60*60-1)*1000))
+                                "lt" : new Date(DataOp.getNextUpdateTime() - ((24*60*60-1)*1000)),
+                                "gt" : "2015-08-01T01:30:00.000Z"
+                            }
+                        }
+                    });
+                }else{
+                    q["query"]["filtered"]["filter"]["bool"]["must"].push({
+                        "range" : {
+                            "publish_on" : {
+                                "gt" : "2015-08-01T01:30:00.000Z"
                             }
                         }
                     });

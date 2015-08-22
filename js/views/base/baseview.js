@@ -57,7 +57,7 @@ var BaseView = (function(){
                             this.viewLoaded();
                         }.bind(this));
                     }
-                }.bind(this),500);
+                }.bind(this),200);
             }.bind(this));
         },
 

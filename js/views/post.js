@@ -93,7 +93,7 @@ var PostView = (function(){
             $("#header .share").gwClick(function(el){
                 var message = {
                     text: this.post.title,
-                    url  : (this.post.orignalUrl || this.post.link)
+                    url  : "http://www.opsight.in/article?url="+encodeURIComponent(this.post.orignalUrl || this.post.link)
                 };
                 window.socialmessage.send(message);
             }.bind(this),{
@@ -190,9 +190,11 @@ var PostView = (function(){
 
         recordView : function(){
             DataOp.loadURL({
-                u : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/"+this.post._id,
-                t : "GET",
+                u : app.config["END_POINTS"]["FEED_ITEMS"],
+                d : {id : this.post._id},
+                t : "POST",
                 c : function(d){
+                    d = JSON.parse(d);
                     if(!d._source){
                         return;
                     }
@@ -200,12 +202,15 @@ var PostView = (function(){
                         "doc" : { "view_count" : d._source.view_count ? d._source.view_count+1 : 1}
                     };
                     DataOp.loadURL({
-                        u : "https://4alumebpq7:bgb5z88h1r@voyagefeeds-6893254287.eu-west-1.bonsai.io/voyagefeeditem/voyagefeeditem/"+d._id+"/_update",
+                        u : app.config["END_POINTS"]["UPDATE_ITEM"],
                         t : "POST",
-                        d : JSON.stringify(toUpd),
+                        d : {
+                                q : JSON.stringify(toUpd),
+                                id : d._id
+                            },
                         c : function(){
                         }.bind(this)
-                    });
+                    },true);
                 }.bind(this)
             },true);
         },

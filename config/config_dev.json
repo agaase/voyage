@@ -7,19 +7,20 @@
         "OPEN_IN_BROWSER_MSG" : "Click on image to open in browser",
         "VALID_USERNAME_PASSWORD" : "<span class='error'>Please enter valid username & password.</span>",
         "INVALID_PASSWORD" : "<span class='error'>Password needs to be atleast 6 characters.</span>",
-        "LOGIN_MSG" : "Click login if you already have an email id setup",
-        "REGISTER_MSG" : "Click register if you are a new user",
+        "LOGIN_MSG" : "Signup with your email <br>Click login if you already have an email setup",
+        "REGISTER_MSG" : "Login with your email<br>Click register if you are a new user",
         "FORGOT_MSG" : "Enter the email you signed up with",
         "INVALID_EMAIL" : "<span class='error'>Please enter valid email.</span>",
         "ID_ALREADY_REGISTERED" : "<span class='error'>Email already registered</span>",
-        "INFO_SEND_TEMP_PASSWORD" : "We will send you a temporary password to your email id",
-        "INFO_SENT_TEMP_PASSWORD" : "Temporary password sent to your email. Please change once logged in. If you didn't receive it, please send a mail to support@voyageapp.in with your registered email id and we will check it out. <div class='backtologin'>Back to login</div>",
+        "INFO_SEND_TEMP_PASSWORD" : "We will send you a temporary password to your email.<div class='backtologin'>Back to login</div>",
+        "INFO_SENT_TEMP_PASSWORD" : "Temporary password sent to your email. Please change once logged in. If you didn't receive it, please send a mail to support@voyageapp.in with your registered email id and we will get back to you ASAP. <div class='backtologin'>Back to login</div>",
         "THEMES_PAGE_MSG" : "Customize your home page by choosing themes (atleast two)"
     },
 
     "END_POINTS" : {
         "USERS_COLLECTION" : "https://api.mongolab.com/api/1/databases/voyageusers_dev/collections/users/",
         "FEED_ITEMS" : "http://vyg2.herokuapp.com/data",
+        "UPDATE_ITEM" : "http://vyg2.herokuapp.com/update",
         "AUTH_HEADER" : "NGFsdW1lYnBxNzpiZ2I1ejg4aDFy",
         "SENDGRID" : "http://vyg2.herokuapp.com/mail"
     },
@@ -37,49 +38,85 @@
         "MONGODB" : "Xh9SI49zvHqiW6Ma5KaQQsHcIuhu0l2G"
     },
 
-    "THEMES" :  {
+   "THEMES" :  {
         "T1" : {
             "category_title": "India",
-            "description" : "Opinions and analyses that focus on India and its myriad issues.",
-            "color" : "#D0E2B8",
-            "img" : "dist/img/india.png"
-        },
-        "T2" : {
-            "category_title": "wisdom",
-            "description" : "Experiences, philosophies and ways of the world. Sometimes it's best to learn from the wisdom of others.",
-            "color" : "#E3C9C6",
-            "img" : "dist/img/life.png"
-        },
-        "T3" : {
-            "category_title": "finance",
-            "description" : "Everything related to value investing, personal finance and human behavior.",
-            "color": "#B3DCE8",
-            "img" : "dist/img/finance.png"
+            "preSelected" : true,
+            "bucket" : "p1"
         },
         "T4" : {
-            "category_title": "world",
-            "description" : "The world as it unfolds, reflecting concerns around politics, environment and humanity, among all else.",
-            "color" : "#D5B69A",
-            "img" : "dist/img/world.png"
+            "category_title": "World",
+            "preSelected" : true,
+            "bucket" : "p1"
         },
-        "T5" : {
-            "category_title" : "tech",
-            "description" : "The latest trends, movements and concepts in the technology world.",
-            "color" : "#C3CFE9",
-            "img" : "dist/img/tech.png"
+         "T5" : {
+            "category_title" : "Tech",
+            "preSelected" : true,
+            "bucket" : "p1"
         },
-        "T6" : {
-            "category_title" : "investing",
-            "description" : "The latest trends, movements and concepts in the technology world.",
-            "color" : "#C3CFE9",
-            "img" : "dist/img/tech.png"
+         "T12" : {
+            "category_title" : "Science",
+            "bucket" : "p4"
         },
         "T7" : {
-            "category_title" : "self-learn",
-            "description" : "The latest trends, movements and concepts in the technology world.",
-            "color" : "#C3CFE9",
-            "img" : "dist/img/tech.png"
+            "category_title" : "Self-learn",
+            "preSelected" : true,
+            "bucket" : "p2"
+        },
+        "T10" : {
+            "category_title" : "Finance",
+            "preSelected" : true,
+            "bucket" : "p3"
+        },
+        "T2" : {
+            "category_title": "Wisdom",
+            "preSelected" : true,
+            "bucket" : "p2"
+        },
+        "T3" : {
+            "category_title": "Economy",
+            "bucket" : "p3"
+        },
+        "T6" : {
+            "category_title" : "Investing",
+            "bucket" : "p3"
+        },
+        "T8" : {
+            "category_title" : "Psychology",
+            "bucket" : "p2"
+        },
+        "T11" : {
+            "category_title" : "Industry",
+            "bucket" : "p3"
+        },
+        "T13" : {
+            "category_title" : "Product",
+            "bucket" : "p4"
+        },
+        "T14" : {
+            "category_title" : "Future",
+            "bucket" : "p4"
+        },
+        "T15" : {
+            "category_title" : "Geostrategy",
+            "bucket" : "p5"
+        },
+        "T16" : {
+            "category_title" : "Trade",
+            "bucket" : "p3",
+            "disable" : true
+        },
+        "T17" : {
+            "category_title" : "Polity",
+            "bucket" : "p5"
+        },
+        "T18" : {
+            "category_title" : "Society",
+            "bucket" : "p5"
+        },
+        "T19" : {
+            "category_title" : "Media",
+            "bucket" : "p5"
         }
-
     }
 }

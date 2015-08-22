@@ -14,11 +14,18 @@ var LoginView = (function(){
             DataOp.getUser($("input.email").val(),function(user){
                 if(!user.email){
                     pass = md5(pass);
+                    var thms = [];
+                    debugger;
+                    $.each(app.config.THEMES,function(k,v){
+                      if(v.preSelected){
+                        thms.push(k);
+                      }
+                    });
                     DataOp.addUser({
                         "_id" : email,
                         "email" : email,
                         "password" : pass,
-                        "themes" : Object.keys(app.config.THEMES)
+                        "themes" : thms
                     },function(u){
                         DataOp.sendMail({
                             "to" : email,
@@ -97,7 +104,7 @@ var LoginView = (function(){
      */
     var savePassword = function(pass,c,id){
         DataOp.runMongoQuery({
-            "u" : app.config["END_POINTS"]["USERS_COLLECTION"]+(id || app.user._id),
+            "u" : app.config["END_POINTS"]["USERS_COLLECTION"]+(id || app.user._id)+"?u=false",
             "t" : "PUT",
             "d" : JSON.stringify( {"$set":{ "password" : pass } }),
             "c" : c
@@ -134,6 +141,10 @@ var LoginView = (function(){
             $(".loginMsg").html(app.config.APP_MESSAGES["FORGOT_MSG"]);
             $("input.email").attr("placeholder","Your email");
             $(".userForm .message").html(app.config.APP_MESSAGES["INFO_SEND_TEMP_PASSWORD"]);
+            $(".userForm .message .backtologin").gwClick(function(el){
+                $(".userForm .message").html("");
+                $(".userForm").removeClass("forgot");
+            }.bind(this));
         },{
             "data-timeout" : 50
         });
@@ -171,7 +182,7 @@ var LoginView = (function(){
               if(val && val.length){
                   UIRender.toggleLoader();
                   //Any random password would do.
-                  var pass = "vyg"+parseInt(Math.random()*1000);
+                  var pass = "ops"+parseInt(Math.random()*1000);
                   DataOp.sendMail({
                       "to" : val,
                       "subject" : app.config.APP_MESSAGES["FORGOT_PASS_SUBJECT"],

@@ -1,4 +1,19 @@
 var HeaderView = (function(){
+
+
+    var toggleAllThemes = function(){
+      if($(".allThemes").hasClass("show")){
+        $(".allThemes").removeClass("bgShow");
+        setTimeout(function(){
+          $(".allThemes").removeClass("show");
+        },100);
+      }else{
+        $(".allThemes").addClass("show");
+        setTimeout(function(){
+          $(".allThemes").addClass("bgShow");
+        },250);
+      }
+    };
    
     var obj = BaseView.extend({
 
@@ -8,10 +23,16 @@ var HeaderView = (function(){
 
       constructor : function(){
         this.elOb = $(this.el);
+        this.renderAllThemes();
       },
 
+
+
       manageBack : function(){
-          if(app.viewStack.length > 1){
+          if($(".allThemes").hasClass("show")){
+            toggleAllThemes();
+          }
+          if(app.viewStack.length > 0){
               var el = $("#header .back");
               if(el.hasClass("refresh")){
                   //If the main view has to be refreshed.
@@ -64,6 +85,33 @@ var HeaderView = (function(){
                 "data-activegrp" : "dummy",
                 "useClick" : true
             });
+
+            $(".allTh",this.elOb).gwClick(function(el){
+                toggleAllThemes();
+            },{
+                "data-activegrp" : "dummy",
+                "useClick" : true
+            });
+
+            $(".allThemes").gwClick(function(el,event){
+              toggleAllThemes();
+            },{
+                "data-activegrp" : "dummy",
+                "useClick" : true
+            });
+            $(".allThemes .th").gwClick(function(el,event){
+              event.stopPropagation();
+              toggleAllThemes();
+              setTimeout(function(){
+                UIRender.toggleLoader();
+                var thView = new ThemeView(el.data("id").trim());  
+                debugger;
+                thView.launch();  
+              },200);
+            },{
+                "useClick" : true
+            });
+
             $.subscribe("/vyg/refreshToggle", function(){
                 if(app.shouldBeRefreshed){
                   $(".refreshI",this.elOb).addClass("show");  
@@ -86,9 +134,22 @@ var HeaderView = (function(){
                 this.manageBack();
             }.bind(this), false);
       },
+      
+      renderAllThemes : function(){
+        var buckets = Util.getThemeBuckets($.extend(true,{},app.config["THEMES"]));
+        var html = "<div class='label'>ALL THEMES <div class='labelMsg'>(Select a theme to read articles)</div></div>";
+        $.each(buckets,function(bck,themes){
+          html += "<div class='themeBucket'>";
+          $.each(themes,function(i,v){
+             html  += "<div data-id='"+v.id+"' class='th'>"+v.category_title+"</div>";
+          });
+          html += "</div>";
+        });
+        $(".allThemes .allThemesCont").html(html);
+      },
 
       launch : function(){
-
+        
       }
     });
     return obj;
